@@ -1,6 +1,12 @@
 '''
 Created on Apr 24, 2016
 
+The first in a sequence of functions designed
+to pipeline Mike Roundtree's BS-seq protocol.
+
+This particular function runs BRAT-BW to map
+bisulfite-seq reads.
+
 @author: alister
 '''
 
@@ -8,9 +14,16 @@ import os
 import sys
 import argparse
 
-
-def bisulfiteMap(genome, build=False, fastFile, result_directory, m=2):
+#FIXME: pass result_directory here or handle elsewhere??
+def bisulfiteMap(genome, build, fastFile, result_directory, m):  
     '''
+    Run BRAT-BW to map bisulfite-seq reads.
+    args: genome (a reference genome)
+          build (whether or not the reference genome needs to be built)
+          fastFile (a fastq file containing bisulfite-seq reads)
+          result_directory (a target directory for the end of the pipeline)
+          m (the number of non-BS mistmatches)
+    returns: result_directory (TENTATIVE)
     '''
     try:
         os.system('load brat/2.0.1')
@@ -31,6 +44,7 @@ def bisulfiteMap(genome, build=False, fastFile, result_directory, m=2):
 
 if __name__ == "__main__":
     '''
+    Set default values for build and m arguments. Run from the command line. 
     '''
     parser = argparse.ArgumentParser(description="run BRAT-BW to map bisulfite-seq reads")
     parser.add_argument('genome', type=str, help='a complete genome to map reads to')
