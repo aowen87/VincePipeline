@@ -37,7 +37,7 @@ def bisulfiteMap(genome, fastFile, result_directory, build, m):
     os.system('trim -s {} -P N5417 -q 20 -m {}'.format(fastFile, m))
     os.system('brat_bw -P Nc12_genome -s BStrim.txt -o BSmapped.txt -W -C -m {}'.format(m)) #FIXME: genome hard coded
     os.system('remove-dupl -r {}.txt -s BSmapped.txt'.format(genome)) #genome.txt?????
-    os.system('argt-count -r {} -P 5mC_BSmapped -s BSmapped_rd.txt -B'.format(genome))
+    os.system('acgt-count -r {} -P 5mC_BSmapped -s BSmapped_rd.txt -B'.format(genome)) #wrong count command
     
     
 
