@@ -13,50 +13,68 @@ bisulfite-seq reads.
 import os
 import sys
 import argparse
+import glob
 
 #FIXME: pass result_directory here or handle elsewhere??
 #FIXME: 
-def bisulfiteMap(genome, fastFile, result_directory, build, m):  
+def bisulfiteMap(BRAT_genome_dir, fastq_dir, strand_name, result_directory, build, non_BS_mismatches, quality_score):  
     '''
     Run BRAT-BW to map bisulfite-seq reads.
-    args: genome (a reference genome)
-          build (whether or not the reference genome needs to be built)
-          fastFile (a fastq file containing bisulfite-seq reads)
-          result_directory (a target directory for the end of the pipeline)
-          m (the number of non-BS mistmatches)
-    returns: result_directory (TENTATIVE)
+    args: BRAT_genome_dir (a reference BRAT_genome_dir -> str)
+          fastq_dir (a directory path containing the fastq files to be mapped -> str)
+          strand_name (the name of the strand; will be appended to file names -> str)
+          result_directory (a target directory for the end of the pipeline -> str)
+          build (whether or not the reference BRAT_genome_dir needs to be built -> bool)
+          non_BS_mismatches (the number of non-BS mismatches -> int)
+          quality_score (the quality score -> int)
     '''
-    #FIXME: Create results directory?
+    if os.path.isdir(result_directory):
+        print("\n{} already exists...".format(result_directory))
+        cont = input("\nUsing this directory may result in current files being replaced. Would you like to continue? (y/n)")
+        if cont != 'y':
+            sys.exit("\nEXITING\n")
+    else:
+        os.system('mkdir {}'.format(result_directory))
     
-    #FIXME: Once working, change to handle multiple fastq files
-    #       make sure that each output file has a unique name. 
-    os.system('load brat/2.0.1')
+    fastqFiles = [file for file in glob.glob('./{}/*.fastq'.format(fastq_dir))]
+    
+    #os.system('load brat/2.0.1')  FIXME: can't seem to effectively evoke from python. May need to evoke a bash
+    #                                     script using 'source module load ...
     if build:
-        os.system('build_bw -P {}'.format(genome))
-        os.system('build_bw -P {} -G 2 -r {}'.format(genome, genome)) 
-    os.system('trim -s {} -P N5417 -q 20 -m {}'.format(fastFile, m))
-    os.system('brat_bw -P Nc12_genome -s BStrim.txt -o BSmapped.txt -W -C -m {}'.format(m)) #FIXME: genome hard coded
-    os.system('remove-dupl -r {}.txt -s BSmapped.txt'.format(genome)) #genome.txt?????
-    os.system('acgt-count -r {} -P 5mC_BSmapped -s BSmapped_rd.txt -B'.format(genome)) 
-    
-    
-
+        os.system('build_bw -P {}'.format(BRAT_genome_dir))
+        os.system('build_bw -P {} -G 2 -r {}'.format(BRAT_genome_dir, BRAT_genome_dir)) 
+    count = len(fastqFiles)
+    for i in range(count):
+        os.system('trim -s {} -P {} -q {} -m {}'.format(fastqFiles[i], strand_name, quality_score, non_BS_mismatches))
+        os.system('brat_bw -P {} -s {}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand_name, non_BS_mismatches)) 
+        os.system('remove-dupl -r Nc12genome -s BSmapped.txt'.format(BRAT_genome_dir))                      #FIXME: BRAT_genome_dir file hard coded. change to param?
+        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_forw.txt -B')                     # same as above ^
+        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_rev.txt -B')                      # same as above ^
+        os.system('mv 5mC_BSmapped_forw.txt 5mC_BSmapped_forw_{}.txt'.format(i))  
+        os.system('mv 5mC_BSmapped_rev.txt 5mC_BSmapped_rev_{}.txt'.format(i))
+        os.system('mv 5mC_BSmapped_forw_{}.txt {}'.format(i, result_directory))    
+        os.system('mv 5mC_BSmapped_rev_{}.txt {}'.format(i, result_directory)) 
+        #NOTE: may need to alter other file names if they are needed further down the pipeline.
 
 if __name__ == "__main__":
     '''
-    Set default values for build and m arguments. Run from the command line. 
+    Set default values for various parameters. Run from the command line. 
     '''
     parser = argparse.ArgumentParser(description="run BRAT-BW to map bisulfite-seq reads")
     parser.add_argument('genome', type=str, help='a complete genome to map reads to')
     parser.add_argument('fastFile', type=str, help='a fastq file containing bisulfite-seq reads')
+    parser.add_argument('strand_name', type=str, help='the name of the strand')
     parser.add_argument('result_directory', type=str, help='the directory where the (entire) pipeline results will be stored')
     parser.add_argument('build', action='store_false', help='Do you need to build a genome? default=False')
-    parser.add_argument('m', type=int, nargs='?', default=2, help='specify the number of non-BS mismatches. default=2')
+    parser.add_argument('non_BS_mismatches', type=int, nargs='?', default=2, help='specify the number of non-BS mismatches. default=2')
+    parser.add_argument('quality_score', type=int, nargs='?', default=20, help='quality score. default=20')
     args = parser.parse_args()
     genome = args.genome
-    build = args.build
+    strand = args.strand_name
     fastFile = args.fastFile
     result_directory = args.result_directory
-    m = args.m
-    bisulfiteMap(genome, fastFile, result_directory, build, m)
+    build = args.build
+    m = args.non_BS_mismatches
+    qs = args.quality_score
+    bisulfiteMap(genome, fastFile, strand, result_directory, build, m, qs)
 
