@@ -15,8 +15,7 @@ import sys
 import argparse
 import glob
 
-#FIXME: pass result_directory here or handle elsewhere??
-#FIXME: 
+
 def bisulfiteMap(BRAT_genome_dir, fastq_dir, strand_name, result_directory, build, non_BS_mismatches, quality_score):  
     '''
     Run BRAT-BW to map bisulfite-seq reads.
