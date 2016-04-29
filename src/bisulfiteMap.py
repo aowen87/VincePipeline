@@ -68,7 +68,7 @@ if __name__ == "__main__":
     parser.add_argument('BRAT_genome', type=str, help='a BRAT-BW genome directory')
     parser.add_argument('fastq_dir', type=str, help='a directory containing fastq files of bisulfite-seq reads')
     parser.add_argument('strand_name', type=str, help='the name of the strand')
-    parser.add_argument('result_dir', type=str, help='the directory where the (entire) pipeline results will be stored')
+    parser.add_argument('result_dir', type=str, help='the directory where the protocol results will be stored')
     parser.add_argument('build', action='store_false', help='Do you need to build a genome? default=False')
     parser.add_argument('non_BS_mismatches', type=int, nargs='?', default=2, help='specify the number of non-BS mismatches. default=2')
     parser.add_argument('quality_score', type=int, nargs='?', default=20, help='quality score. default=20')
