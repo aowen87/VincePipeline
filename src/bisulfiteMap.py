@@ -60,7 +60,7 @@ if __name__ == "__main__":
     '''
     Set default values for various parameters. Run from the command line. 
     '''
-    if len(sys.argv) < 5:
+    if len(sys.argv) < 4:
         print("""Usage:  {} <BRAT_genome_dir> <fasq_dir> <strand_name> <result_dir> <build=False> 
         <non_BS_mistmatches=2> <quality_score=20>""".format(sys.argv[0]))
         exit(1)
