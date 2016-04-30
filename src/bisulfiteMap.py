@@ -65,7 +65,7 @@ if __name__ == "__main__":
     Set default values for various parameters. Run from the command line. 
     '''
     if len(sys.argv) < 3:
-        print("""Usage:  {} <BRAT_genome_dir> <fasq_dir> <strand_name> <result_dir> <build=False> 
+        print("""Usage:  {} <BRAT_genome_dir> <fasq_dir> <result_dir> <build=False> 
         <non_BS_mistmatches=2> <quality_score=20>""".format(sys.argv[0]))
         exit(1)
     parser = argparse.ArgumentParser(description="run BRAT-BW to map bisulfite-seq reads")
