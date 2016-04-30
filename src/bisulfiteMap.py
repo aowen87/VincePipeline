@@ -43,9 +43,9 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
     if build:
         os.system('build_bw -P {}'.format(BRAT_genome_dir))
         os.system('build_bw -P {} -G 2 -r {}'.format(BRAT_genome_dir, BRAT_genome_dir)) 
-    count = len(fastqFiles)
+    
     strand_count = defaultdict(int)
-    for f in range(count):
+    for f in fastqFiles:
         strand = f.split("_")[1].split("-")[0]
         strand_count[strand] += 1
         os.system('trim -s {} -P N{}_{} -q {} -m {}'.format(f, strand, strand_count[strand], quality_score, non_BS_mismatches))
