@@ -45,18 +45,18 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
         os.system('build_bw -P {} -G 2 -r {}'.format(BRAT_genome_dir, BRAT_genome_dir)) 
     count = len(fastqFiles)
     strand_count = defaultdict(int)
-    for i in range(count):
-        strand = fastqFiles[i].split("_")[1].split("-")[0]
+    for file in range(count):
+        strand = file.split("_")[1].split("-")[0]
         strand_count[strand] += 1
-        os.system('trim -s {} -P N{}_{} -q {} -m {}'.format(fastqFiles[i], strand, strand_count[strand], quality_score, non_BS_mismatches))
+        os.system('trim -s {} -P N{}_{} -q {} -m {}'.format(file, strand, strand_count[strand], quality_score, non_BS_mismatches))
         os.system('brat_bw -P {} -s N{}_{}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand, strand_count[strand], non_BS_mismatches)) 
         os.system('remove-dupl -r Nc12genome -s BSmapped.txt'.format(BRAT_genome_dir))        #FIXME: BRAT_genome_dir file hard coded. change to param?
         os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_forw.txt -B')           # same as above ^
         os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_rev.txt -B')            # same as above ^
-        os.system('mv 5mC_BSmapped_forw.txt 5mC_BSmapped_forw_{}.txt'.format(i))  
-        os.system('mv 5mC_BSmapped_rev.txt 5mC_BSmapped_rev_{}.txt'.format(i))
-        os.system('mv 5mC_BSmapped_forw_{}.txt {}'.format(i, result_dir))    
-        os.system('mv 5mC_BSmapped_rev_{}.txt {}'.format(i, result_dir)) 
+        os.system('mv 5mC_BSmapped_forw.txt 5mC_BSmapped_forw_N{}_{}.txt'.format(strand, strand_count[strand]))  
+        os.system('mv 5mC_BSmapped_rev.txt 5mC_BSmapped_rev_N{}_{}.txt'.format(strand, strand_count[strand]))
+        os.system('mv 5mC_BSmapped_forw_N{}_{}.txt {}'.format(strand, strand_count[strand], result_dir))    
+        os.system('mv 5mC_BSmapped_rev_N{}_{}.txt {}'.format(strand, strand_count[strand], result_dir)) 
         #NOTE: may need to alter other file names if they are needed further down the pipeline.
 
 
