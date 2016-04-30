@@ -46,10 +46,10 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
     count = len(fastqFiles)
     strand_count = defaultdict(int)
     for i in range(count):
-        strand = fastqFiles[i].split("_")[1]
+        strand = fastqFiles[i].split("_")[1].split("-")[0]
         strand_count[strand] += 1
-        os.system('trim -s {} -P {}_{} -q {} -m {}'.format(fastqFiles[i], strand, strand_count[strand], quality_score, non_BS_mismatches))
-        os.system('brat_bw -P {} -s {}_{}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand, strand_count[strand], non_BS_mismatches)) 
+        os.system('trim -s {} -P N{}_{} -q {} -m {}'.format(fastqFiles[i], strand, strand_count[strand], quality_score, non_BS_mismatches))
+        os.system('brat_bw -P {} -s N{}_{}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand, strand_count[strand], non_BS_mismatches)) 
         os.system('remove-dupl -r Nc12genome -s BSmapped.txt'.format(BRAT_genome_dir))        #FIXME: BRAT_genome_dir file hard coded. change to param?
         os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_forw.txt -B')           # same as above ^
         os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_rev.txt -B')            # same as above ^
