@@ -30,7 +30,7 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
     
     if os.path.isdir(result_dir):
         print("\n{} already exists...".format(result_dir))
-        cont = input("\nUsing this directory may result in current files being replaced. Would you like to continue? (y/n)")
+        cont = input("\nUsing this directory may result in current files being replaced. Would you like to continue? (y/n) ")
         if cont != 'y':
             sys.exit("\nEXITING\n")
     else:
