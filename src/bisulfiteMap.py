@@ -21,7 +21,6 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
     Run BRAT-BW to map bisulfite-seq reads.
     args: BRAT_genome_dir (a reference BRAT_genome_dir -> str)
           fastq_dir (a directory path containing the fastq files to be mapped -> str)
-          strand_name (the name of the strand; will be appended to file names -> str)
           result_dir (a target directory for the end of the pipeline -> str)
           build (whether or not the reference BRAT_genome_dir needs to be built -> bool)
           non_BS_mismatches (the number of non-BS mismatches -> int)
