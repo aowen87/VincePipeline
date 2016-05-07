@@ -32,13 +32,17 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
         cont = input("\nUsing this directory may result in current files being replaced. Would you like to continue? (y/n) ")
         if cont != 'y':
             sys.exit("\nEXITING\n")
+    
+    #FIXME:
+    #check to see if file 'mappedDupl' exists. If not, create it and add 
+    #the text 'BSmapped.txt'. 
+    #Check to see if 'mappedNoDupl' exists. If not, create it and add 
+    #the text 'BSmapped.txt.nodupl'.
     else:
         os.system('mkdir {}'.format(result_dir))
     
     fastqFiles = [file for file in glob.glob('./{}/*.fastq'.format(fastq_dir))]
     
-    #os.system('load brat/2.0.1')  FIXME: can't seem to effectively evoke from python. May need to evoke a bash
-    #                                     script using 'source module load ...
     if build:
         os.system('build_bw -P {}'.format(BRAT_genome_dir))
         os.system('build_bw -P {} -G 2 -r {}'.format(BRAT_genome_dir, BRAT_genome_dir)) 
@@ -49,16 +53,13 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, result_dir, build, non_BS_mismatche
         strand_count[strand] += 1
         os.system('trim -s {} -P N{}_{} -q {} -m {}'.format(f, strand, strand_count[strand], quality_score, non_BS_mismatches))
         os.system('brat_bw -P {} -s N{}_{}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand, strand_count[strand], non_BS_mismatches)) 
-        os.system('remove-dupl -r Nc12genome -s BSmapped.txt')        #FIXME: Nc12genome hard coded. change to param?
-        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_forw.txt -B')           # same as above ^
-        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped -s 5mC_BSmapped_rev.txt -B')            # same as above ^
-        os.system('mv 5mC_BSmapped_forw.txt 5mC_BSmapped_forw_N{}_{}.txt'.format(strand, strand_count[strand]))  
-        os.system('mv 5mC_BSmapped_rev.txt 5mC_BSmapped_rev_N{}_{}.txt'.format(strand, strand_count[strand]))
-        os.system('mv 5mC_BSmapped_forw_N{}_{}.txt {}'.format(strand, strand_count[strand], result_dir))    
-        os.system('mv 5mC_BSmapped_rev_N{}_{}.txt {}'.format(strand, strand_count[strand], result_dir)) 
+        os.system('remove-dupl -r Nc12genome -s mappedDupl')  
+        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped_N{}_{} -s mappedNoDupl -B').format(strand, strand_count[strand])       
+        os.system('mv 5mC_BSmapped_N{}_{}_forw.txt {}'.format(strand, strand_count[strand], result_dir))    
+        os.system('mv 5mC_BSmapped_N{}_{}_rev.txt {}'.format(strand, strand_count[strand], result_dir)) 
+        os.system('rm *.nodupl')
         #NOTE: may need to alter other file names if they are needed further down the pipeline.
-
-
+        
 if __name__ == "__main__":
     '''
     Set default values for various parameters. Run from the command line. 
