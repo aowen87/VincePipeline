@@ -11,14 +11,16 @@ import os
 import sys
 import argparse
 import glob
-from collections import defaultdict
 
 
 def stepAnalyzing(file_dir, result_dir):
+    """
+    The step for analyzing the final BRAT ACGT count 5mC output files.
+    """
 
     if os.path.isdir(result_dir):
         print("\n{} already exists...".format(result_dir))
-        cont = input("\nUsing this directory may result in current files being replaced. Would you like to continue? (y/n)")
+        cont = input("\nUsing this directory may result in current files being replaced. Would you like to continue? (y/n) ")
         if cont != 'y':
             sys.exit("\nEXITING\n")
     else:
@@ -32,38 +34,44 @@ def stepAnalyzing(file_dir, result_dir):
 
     for i in range(0, file_len, 2):
         forw = mCfiles[i]
-        rev = mCfiles[i+1]
+        rev  = mCfiles[i+1]
 
-        txt = ".txt"
-        merge = result_dir+rev.replace("rev", "merge")+txt
-        sort = result_dir+rev.replace("rev", "sort")+txt
-        mC = result_dir+rev.replace("rev", "only5mC")+txt
-        CHH = result_dir+rev.replace("rev", "CHH")+txt
-        CG = result_dir+rev.replace("rev", "CG")+txt
-        CHG = result_dir+rev.replace("rev", "CHG")+txt
+        unProcMerge = rev.replace("rev", "unProcMerge").replace(file_dir, result_dir)
+        merged      = rev.replace("rev", "merged").replace(file_dir, result_dir)
+        sort        = rev.replace("rev", "sort").replace(file_dir, result_dir)
+        mC          = rev.replace("rev", "only5mC").replace(file_dir, result_dir)
+        CHH         = rev.replace("rev", "CHH").replace(file_dir, result_dir)
+        CG          = rev.replace("rev", "CG").replace(file_dir, result_dir)
+        CHG         = rev.replace("rev", "CHG").replace(file_dir, result_dir)
         # extract forw, rev file, and generate corresponding file names
-
-
-        os.system('cat {} {} > -q {}'.format(forw, rev, merge))
-        os.system('sort {} -o {}'.format(merge, sort))
-        os.system('awk {sum+=$6} END {print "Average for " FILENAME "=", sum/NR} {}'.format(sort))        #FIXME: Nc12genome hard coded. change to param?
-        os.system('awk END {print NR} {}'.format(sort))
-        os.system('awk $6>0 {} > {}'.format(sort, mC))
-        os.system('awk {sum+=$6} END {print "Average reads for "FILENAME" = ", sum/NR}'.format(sort))
+         
+        os.system('cat {} {} > {}'.format(forw, rev, unProcMerge))
+        os.system("sed 's/:/\t/g' {} > {}".format(unProcMerge, merged))
+        os.system('sort {} -o {}'.format(merged, sort))
+        os.system("""awk '{sum+=$6} END {print "Average for " FILENAME "= ",sum/NR}' """ + sort)
+        os.system("awk 'END {{print NR}}' {}".format(sort))
+        os.system("awk '$6>0' {} > {}".format(sort, mC))
+        os.system("""awk '{sum+=$6} END {print "Average for " FILENAME "= ",sum/NR}' """ + mC)
+        os.system("""awk '{sum+=$5} END {print "Average reads for " FILENAME "= ",sum/NR}' """ + sort)
+        
         os.system('grep CHH {} > {} '.format(sort,CHH))
         os.system('grep CG {} > {}'.format(sort, CG))
         os.system('grep CHG {} > {}'.format(sort, CHG))
-        os.system('awk END {print NR } {}'.format(CHH))
-        os.system('awk END {print NR } {}'.format(CG))
-        os.system('awk END {print NR } {}'.format(CHG))
-
-
+        
+        os.system("""awk '{sum+=$6} END {print "Average for " FILENAME "= ",sum/NR}' """ + CHH)
+        os.system("""awk '{sum+=$6} END {print "Average for " FILENAME "= ",sum/NR}' """ + CG)
+        os.system("""awk '{sum+=$6} END {print "Average for " FILENAME "= ",sum/NR}' """ + CHG)
+        
+        os.system("awk 'END {{print NR }}' {}".format(CHH))
+        os.system("awk 'END {{print NR }}' {}".format(CG))
+        os.system("awk 'END {{print NR }}' {}".format(CHG))
+        
 
 if __name__ == "__main__":
     '''
     Set default values for various parameters. Run from the command line.
     '''
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 2:  
         print("""Usage:  {} <file_dir> <result_dir>""".format(sys.argv[0]))
         exit(1)
     parser = argparse.ArgumentParser(description="analysis for 5mC files")
