@@ -45,6 +45,9 @@ def stepAnalyzing(file_dir, result_dir):
         CHG         = rev.replace("rev", "CHG").replace(file_dir, result_dir)
         # extract forw, rev file, and generate corresponding file names
          
+         
+        #FIXME: there are several print commands that may be unnecesarry (they aren't affecting 
+        #any of the output files). We should ask Vince if these are extraneous. 
         os.system('cat {} {} > {}'.format(forw, rev, unProcMerge))
         os.system("sed 's/:/\t/g' {} > {}".format(unProcMerge, merged))
         os.system('sort {} -o {}'.format(merged, sort))
