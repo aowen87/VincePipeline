@@ -1,7 +1,7 @@
 __author__ = 'Hiranmayi Duvvuri'
 __date__ = '05/07/2016'
 __description__ = """
-Prepare BRAW-BW output files for analysis in methylation pipeline.
+Prepare BRAT-BW output files for analysis in methylation pipeline.
 """
 
 import os, sys, glob, argparse
