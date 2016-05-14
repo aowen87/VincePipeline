@@ -16,10 +16,10 @@ def convert_meth_file(input_dir, output_dir):
         output_dir: location to save .meth and .bed files
     """
     if not os.path.exists(output_dir):
-        os.system()
+        os.mkdir(output_dir)
         print(output_dir + ' created')
 
-    tabbed_files = [x for x in glob.glob('{}/*_sorted.txt'.format(input_dir))]
+    tabbed_files = [x for x in glob.glob('{}/*_merged.txt'.format(input_dir))]
 
     for i in tabbed_files:
         strain = i.split('/')[-1].split('_')[2]
