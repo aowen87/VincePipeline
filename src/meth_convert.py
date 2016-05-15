@@ -16,6 +16,8 @@ def convert_meth_file(input_dir, output_dir):
         output_dir: location to save .meth and .bed files
     """
     if not os.path.exists(output_dir):
+        print('{} already exists'.format(output_dir))
+    else:
         os.mkdir(output_dir)
         print(output_dir + ' created')
 
@@ -23,10 +25,9 @@ def convert_meth_file(input_dir, output_dir):
 
     for i in tabbed_files:
         strain = i.split('/')[-1].split('_')[2]
-        print('strain: ' + strain)
         meth_file = '{}/5mC_{}_methylpipe'.format(output_dir, strain)
 
-        print('converting ' + i.split('/')[-1])
+        print('converting {} ...'.format(i.split('/')[-1]))
 
         os.system("cut -f1,2,4,5,6,7 {} > {}.txt".format(i, meth_file))
         os.system("awk '{{print $1,$2,$6,$3,$5,$4}}' {}.txt > {}_new.txt".format(meth_file, meth_file))
@@ -36,19 +37,29 @@ def convert_meth_file(input_dir, output_dir):
         os.system("sed -i 's/CHG/CG/g' {}.txt".format(meth_file))
         os.system("LC_ALL=C sort -k 1,1 -k 3,3n -k 2,2n -k 6,6 -o {}_sorted.txt {}.txt".format(meth_file, meth_file))
         os.system("awk '{{$5 = 1-$5 ; print $0}}' {}_sorted.txt > {}_inverted.meth".format(meth_file, meth_file))
-        print('finding hypo-methylated regions')
+
+        print('finding hypo-methylated regions...')
         os.system("hmr -o {}_inverted.hmr {}_inverted.meth".format(meth_file, meth_file))
 
-if __name__ == '__main__':
+
+def main():
+
+    if len(sys.argv) > 2:
+        print("usage: {} <input_dir> <output_dir>".format(sys.argv[0]))
+        sys.exit(1)
 
     parser = argparse.ArgumentParser(description = 'Run methylation analysis pipeline on BRAT-BW files. Load methpipe before use.')
-    parser.add_argument("meth_dir", 
-                        type = str, 
-                        help = "folder with BRAT-BW output files")
-    parser.add_argument("meth_pipe_out", 
-                        type = str, 
-                        help = "output directory for .meth and .bed files")
+    try:
+        parser.add_argument("meth_dir", 
+                            type = str, 
+                            help = "folder with BRAT-BW output files")
+        parser.add_argument("meth_pipe_out", 
+                            type = str, 
+                            help = "output directory for .meth and .bed files")
 
     args = parser.parse_args()
 
     convert_meth_file(args.meth_dir, args.meth_pipe_out)
+
+if __name__ == '__main__':
+    main()

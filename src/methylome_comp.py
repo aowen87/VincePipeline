@@ -21,6 +21,8 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
     """
 
     if not os.path.exists(output_dir):
+        print('{} already exists'.format(output_dir))
+    else:
         os.makedirs(output_dir)
         print(output_dir + ' created')
 
@@ -37,13 +39,17 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
             os.system("methdiff -o {}/{}vs{}.methdiff {} {}".format(output_dir, s1, s2, wt_meth, i))
 
             print('finding DMRs between {} and {}...'.format(s1, s2))
-            
+
             os.system("dmr {}/{}vs{}.methdiff {} {} {}/DMR_{}vs{}_lt_{} {}/DMR_{}vs{}_lt_{}".format(output_dir, s1,
                         s2, wt_hmr, j, output_dir, s1, s2, s1, output_dir, s1, s2, s2))
     else:
         raise ValueError("please enter a")
 
-if __name__ == '__main__':
+def main():
+
+    if len(sys.argv) > 4:
+        print("usage: {} <input_dir> <output_dir> <wt_meth> <wt_hmr>".format(sys.argv[0]))
+        sys.exit(1)
 
     parser = argparse.ArgumentParser(description = 'Compare methylomes to a control/wild type sample')
     parser.add_argument("mut_input", 
@@ -62,3 +68,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     diff_comp(args.mut_input, args.comp_dir, args.wt_meth, args.wt_hmr)
+
+if __name__ == '__main__':
+    main()
