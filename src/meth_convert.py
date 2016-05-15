@@ -9,12 +9,13 @@ import os, sys, glob, argparse
 def convert_meth_file(input_dir, output_dir):
     """
     convert the BRAT-BW output file to match the Meth-Pipe format. next, convert to a .meth file.
-    run HyperMR analysis producing a .bed file.
+    run HyperMR analysis producing a bed formatted file with the hypo-methylated regions marked.
     requires methpipe to be loaded.
     args:
         input_dir: BRAT-BW output files (where : was replaced with a tab)
         output_dir: location to save .meth and .bed files
     """
+
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
         print(output_dir + ' created')
@@ -41,7 +42,6 @@ def convert_meth_file(input_dir, output_dir):
 
 
 def main():
-
     if len(sys.argv) > 2:
         print("usage: {} <input_dir> <output_dir>".format(sys.argv[0]))
         sys.exit(1)

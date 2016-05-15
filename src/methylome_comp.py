@@ -6,7 +6,6 @@ Compare methylomes and return the differential methylation scores between the tw
 
 import os, sys, glob, argparse
 
-# compare mutants to a control/wildtype
 def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
     """
     begin running Meth-Pipe on converted meth-pipe file. 
@@ -14,9 +13,9 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
     args:
         input_dir: .hmr and .meth files to compare control to
         output_dir: location to save comparisons
-        compare_all: compare all .meth files if True
         wt: wildtype or control file
         mut: mutant file if only comparing one
+
     returns two files with differentially methylated regions identified.
     """
 
@@ -44,7 +43,6 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
         raise ValueError("please enter a")
 
 def main():
-
     if len(sys.argv) > 4:
         print("usage: {} <input_dir> <output_dir> <wt_meth> <wt_hmr>".format(sys.argv[0]))
         sys.exit(1)
