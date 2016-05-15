@@ -22,18 +22,22 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+        print(output_dir + ' created')
 
     mut_meth = [x for x in glob.glob('{}/*.meth'.format(input_dir))]
-    mut_hmr[x for x in glob.glob('{}/*.hmr'.format(input_dir))]
+    mut_hmr = [x for x in glob.glob('{}/*.hmr'.format(input_dir))]
 
-    if compare_all and wt_meth != None and wt_hmr != None:
+    if wt_meth != None and wt_hmr != None:
         for i, j in zip(mut_meth, mut_hmr):
             s1 = wt_meth.split('/')[-1].split('_')[1]
             s2 = i.split('/')[-1].split('_')[1]
 
-            print('finding differential methylation scores between ' + s1 + ' and ' + s2 + '...')
+            print('finding differential methylation scores between {} and {}...'.format(s1, s2))
 
             os.system("methdiff -o {}/{}vs{}.methdiff {} {}".format(output_dir, s1, s2, wt_meth, i))
+
+            print('finding DMRs between {} and {}...'.format(s1, s2))
+            
             os.system("dmr {}/{}vs{}.methdiff {} {} {}/DMR_{}vs{}_lt_{} {}/DMR_{}vs{}_lt_{}".format(output_dir, s1,
                         s2, wt_hmr, j, output_dir, s1, s2, s1, output_dir, s1, s2, s2))
     else:
