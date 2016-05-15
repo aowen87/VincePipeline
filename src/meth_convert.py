@@ -16,8 +16,6 @@ def convert_meth_file(input_dir, output_dir):
         output_dir: location to save .meth and .bed files
     """
     if not os.path.exists(output_dir):
-        print('{} already exists'.format(output_dir))
-    else:
         os.mkdir(output_dir)
         print(output_dir + ' created')
 

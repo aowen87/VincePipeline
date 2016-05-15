@@ -21,8 +21,6 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
     """
 
     if not os.path.exists(output_dir):
-        print('{} already exists'.format(output_dir))
-    else:
         os.makedirs(output_dir)
         print(output_dir + ' created')
 
