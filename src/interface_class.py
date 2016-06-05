@@ -44,8 +44,6 @@ class Interface(Frame):
             for line in terminalOut:
                 out = line + '\n'
                 self._message_txt.insert(INSERT, out)
-
-            self._message_txt.insert(INSERT, '{} \n'.format(command))
             client.close()   
         except Exception:
             self._message_txt.insert(INSERT, "ERROR: unable to connect to ACISS...\n")
