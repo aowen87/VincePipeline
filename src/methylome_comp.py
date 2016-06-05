@@ -13,8 +13,8 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
     args:
         input_dir: .hmr and .meth files to compare control to
         output_dir: location to save comparisons
-        wt: wildtype or control file
-        mut: mutant file if only comparing one
+        wt_meth: .meth wildtype or control file
+        wt_hmr: .hmr wildtype or control file
 
     returns two files with differentially methylated regions identified.
     """
@@ -28,6 +28,9 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
 
     if wt_meth != None and wt_hmr != None:
         for i, j in zip(mut_meth, mut_hmr):
+            if wt_meth == i and wt_hmr == j:
+                continue
+
             s1 = wt_meth.split('/')[-1].split('_')[1]
             s2 = i.split('/')[-1].split('_')[1]
 
@@ -43,7 +46,7 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
         raise ValueError("please enter a")
 
 def main():
-    if len(sys.argv) > 4:
+    if len(sys.argv) > 5:
         print("usage: {} <input_dir> <output_dir> <wt_meth> <wt_hmr>".format(sys.argv[0]))
         sys.exit(1)
 
