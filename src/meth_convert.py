@@ -17,7 +17,7 @@ def convert_meth_file(input_dir, output_dir):
     """
 
     if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
+        os.makedirs(output_dir)
         print(output_dir + ' created')
 
     tabbed_files = [x for x in glob.glob('{}/*_merged.txt'.format(input_dir))]
@@ -42,18 +42,18 @@ def convert_meth_file(input_dir, output_dir):
 
 
 def main():
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 3:
         print("usage: {} <input_dir> <output_dir>".format(sys.argv[0]))
         sys.exit(1)
 
     parser = argparse.ArgumentParser(description = 'Run methylation analysis pipeline on BRAT-BW files. Load methpipe before use.')
-    try:
-        parser.add_argument("meth_dir", 
-                            type = str, 
-                            help = "folder with BRAT-BW output files")
-        parser.add_argument("meth_pipe_out", 
-                            type = str, 
-                            help = "output directory for .meth and .bed files")
+    
+    parser.add_argument("meth_dir", 
+                        type = str, 
+                        help = "folder with BRAT-BW output files")
+    parser.add_argument("meth_pipe_out", 
+                        type = str, 
+                        help = "output directory for .meth and .bed files")
 
     args = parser.parse_args()
 
