@@ -24,19 +24,19 @@ class Interface(Frame):
         raise NotImplementedError
         
 
-    def aciss_connect(self, command, username, password=None):
+    def aciss_connect(self, command, username, pswd=None):
         """
         Connect to ACISS and send job with PBS.
         """
 
-        if password == '':
-            password = None
+        if pswd == '':
+            pswd = None
 
         try:
             client = SSHClient()
             client.set_missing_host_key_policy(AutoAddPolicy())
             client.load_system_host_keys()
-            client.connect('aciss.uoregon.edu', username=username, password=password)
+            client.connect('aciss.uoregon.edu', username=username, password=pswd)
             self._message_txt.insert(INSERT, "Connected to ACISS!\n")
             self._message_txt.insert(INSERT, 'running pipeline...\n')
             stdin, stdout, stderr = client.exec_command(command)

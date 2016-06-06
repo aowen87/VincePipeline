@@ -1,14 +1,12 @@
-'''
-Created on Apr 24, 2016
-
-The first in a sequence of functions designed
+__author__ = 'Alister Maguire'
+__date__ = '04/24/2016'
+__description__ = """The first in a sequence of functions designed
 to pipeline Mike Roundtree's BS-seq protocol.
 
 This particular function runs BRAT-BW to map
-bisulfite-seq reads.
+bisulfite-seq reads. """
 
-@author: alister
-'''
+
 import os
 import sys
 import argparse
@@ -30,14 +28,14 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, build, non_BS_mismatches, quality_s
         os.system('mkdir {}'.format(resultsDir))
             
     if not os.path.isfile("mappedDupl"):
-        print("ERROR: missing file -> mappedDupl")
+        print("ERROR: missing fileDir -> mappedDupl")
         sys.exit()
           
     if not os.path.isfile("mappedNoDupl"):
-        print("ERROR: missing file -> mappedNoDupl")
+        print("ERROR: missing fileDir -> mappedNoDupl")
         sys.exit()
       
-    fastqFiles = [file for file in glob.glob('./{}/*.fastq'.format(fastq_dir))]
+    fastqFiles = [fileDir for fileDir in glob.glob('./{}/*.fastq'.format(fastq_dir))]
     
     if build:
         os.system('build_bw -P {}'.format(BRAT_genome_dir))
@@ -68,13 +66,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="run BRAT-BW to map bisulfite-seq reads")
     parser.add_argument('BRAT_genome', type=str, help='a BRAT-BW genome directory')
     parser.add_argument('fastq_dir', type=str, help='a directory containing fastq files of bisulfite-seq reads')
-    parser.add_argument('build', action='store_false', help='Do you need to build a genome? default=False')
+    parser.add_argument('build', type=str, help='Do you need to build a genome? default=False')
     parser.add_argument('non_BS_mismatches', type=int, nargs='?', default=2, help="""specify the number of non-BS mismatches. default=2""")
     parser.add_argument('quality_score', type=int, nargs='?', default=20, help='quality score. default=20')
     args = parser.parse_args()
     genome = args.BRAT_genome
     fastFiles = args.fastq_dir
-    build = args.build
+    buildStr = args.build
+    if buildStr == 'False':
+        build = False
+    else:
+        build = True
     m = args.non_BS_mismatches
     qs = args.quality_score
     bisulfiteMap(genome, fastFiles, build, m, qs)
