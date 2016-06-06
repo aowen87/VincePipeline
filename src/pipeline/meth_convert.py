@@ -42,7 +42,7 @@ def convert_meth_file(input_dir, output_dir):
 
 
 def main():
-    if len(sys.argv) > 3:
+    if len(sys.argv) > 2:
         print("usage: {} <input_dir> <output_dir>".format(sys.argv[0]))
         sys.exit(1)
 
