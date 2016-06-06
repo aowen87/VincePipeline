@@ -12,9 +12,22 @@ contains other sections from the protocol that may be run separately.
 
 
 Set-up: 
-    In order to successfully run the BRAT pipeline, 
-a directory must be created on ACISS that contains the 
-following sub-directories and files:
+
+    Python:
+        
+        Python 3.x must be installed for running this program. We suggest
+    installing version 3.5 or later. Also, the package 'paramiko' must
+    be installed. To see if paramiko is installed, open a terminal
+    (powershell if on Windows), and type 'pip show paramiko'. If it's 
+    installed, you should see the package details. Otherwise, you can 
+    install paramiko with the following command 'pip install paramiko'. 
+
+    
+    ACISS:
+
+        In order to successfully run the BRAT pipeline, 
+    a directory must be created on ACISS that contains the 
+    following sub-directories and files:
     
     sub-directories:
         <fastq_files>     This directory contains the fastq files
@@ -145,7 +158,9 @@ following sub-directories and files:
                                are those which appeared to be of temporary use within the protocol. 
                                Therefore, this box is checked by default.
 
-    Notes:
+
+    Miscellaneous::
+
         Every time the a qsub job is run, there are 2 output files created as records
     from the job. Currently, these files are not removed with the 'remove extra output'
     option. These files contain records of the processes which can be looked over after
