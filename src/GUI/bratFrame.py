@@ -54,6 +54,7 @@ class BratInterface(Interface):
         clean_check              = Checkbutton(self, text="remove extra output", variable=self._clean_check_var,
                                               onvalue=1, offvalue=0, height=5, width=20)
         start                    = Button(self, text='RUN PIPELINE', font=cur_font, command=self.run_pipeline)
+        self._email_entry.focus_set()
        
         #GUI structure
         email_label.grid(row=0, column=0, sticky=W, padx=PADX+30)
