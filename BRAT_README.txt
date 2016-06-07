@@ -167,3 +167,15 @@ Set-up:
     the jobs have finished execution and are very helpful for determining problems that
     may have occurred. That being said, you'll probably want to remove them or they will 
     continue building up. 
+        
+        The ACISS path for running the pipeline is currently hardcoded into the run_pipeline
+    functions. If you'd like to change this path in the future, you can do so by altering 
+    the string in the command variable (there is a comment above this variable flagging 
+    it as the path variable). The path variable appears as follows:
+        
+        command = ("(cd current_path; qsub -M {} -v vars... pbs_file)".format(inserts...))
+
+    The only aspect of this string you should alter is the current_path, which will be
+    a directory path. Another option is to extend the existing code to take in a path as a
+    variable. There are pros and cons to doing this, and I would suggest only manipulating
+    the code if you are familiar with python and modular programming. 
