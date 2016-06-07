@@ -10,11 +10,11 @@ from interface_class import Interface
 
 class BratInterface(Interface):
     
-    def __init__(self, parent):
+    def __init__(self, master):
         '''
         Set up the main GUI interface and all class variables. 
         '''  
-        Interface.__init__(self, parent)
+        Interface.__init__(self, master)
         
         #fonts, colors, padding, etc. 
         ENTRY_W = 30
@@ -76,7 +76,7 @@ class BratInterface(Interface):
         build_check.grid(row=8, column=0, sticky=W)
         clean_check.grid(row=8, column=1)
         progress_box.grid(row=9, column=0, sticky=N+E+S+W, padx=PADX+5, pady=PADY,columnspan=2)
-        start.grid(row=10, column=1, sticky=E, pady=PADY)
+        start.grid(row=10, column=1, sticky=E, pady=PADY, padx=50)
     
     
     def run_pipeline(self):
