@@ -96,21 +96,17 @@ if __name__ == "__main__":
     '''
     Set default values for various parameters. Run from the command line.
     '''
-    if len(sys.argv) < 2:  
-        print("""Usage:  {} <fileDir> <resultsDir>""".format(sys.argv[0]))
+    if len(sys.argv) < 3:  
+        print("""Usage:  {} <fileDir> <resultsDir> <clean>""".format(sys.argv[0]))
         sys.exit(1)
     parser = argparse.ArgumentParser(description="analysis for 5mC files")
     parser.add_argument("fileDir", type=str, help="directory folder contains source files")
     parser.add_argument("resultsDir", type=str, help="directory folder to store resultsDir files")
-    parser.add_argument('clean', type=str, help="Would you like to remove all files output files not used further on?")
+    parser.add_argument('clean', type=bool, help="Would you like to remove all files output files not used further on?")
     args = parser.parse_args()
     fileDir = args.fileDir
     resultsDir = args.resultsDir
-    cleanStr = args.clean
-    if cleanStr == 'True':
-        clean = True
-    else:
-        clean = False
+    clean = args.clean
     stepAnalyzing(fileDir, resultsDir, clean)
     
     

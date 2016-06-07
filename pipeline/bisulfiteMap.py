@@ -59,24 +59,20 @@ if __name__ == "__main__":
     '''
     Set default values for various parameters. Run from the command line. 
     '''
-    if len(sys.argv) < 2:
-        print("""Usage:  {} <BRAT_genome_dir> <fasq_dir> <build=False> 
+    if len(sys.argv) < 3:
+        print("""Usage:  {} <BRAT_genome_dir> <fasq_dir> <build> 
         <non_BS_mistmatches=2> <quality_score=20>""".format(sys.argv[0]))
         sys.exit()
     parser = argparse.ArgumentParser(description="run BRAT-BW to map bisulfite-seq reads")
     parser.add_argument('BRAT_genome', type=str, help='a BRAT-BW genome directory')
     parser.add_argument('fastq_dir', type=str, help='a directory containing fastq files of bisulfite-seq reads')
-    parser.add_argument('build', type=str, help='Do you need to build a genome? default=False')
+    parser.add_argument('build', type=bool, help='Do you need to build a genome? True/False')
     parser.add_argument('non_BS_mismatches', type=int, nargs='?', default=2, help="""specify the number of non-BS mismatches. default=2""")
     parser.add_argument('quality_score', type=int, nargs='?', default=20, help='quality score. default=20')
     args = parser.parse_args()
     genome = args.BRAT_genome
     fastFiles = args.fastq_dir
-    buildStr = args.build
-    if buildStr == 'False':
-        build = False
-    else:
-        build = True
+    build = args.build
     m = args.non_BS_mismatches
     qs = args.quality_score
     bisulfiteMap(genome, fastFiles, build, m, qs)

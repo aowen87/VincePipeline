@@ -12,9 +12,22 @@ contains other sections from the protocol that may be run separately.
 
 
 Set-up: 
-    In order to successfully run the BRAT pipeline, 
-a directory must be created on ACISS that contains the 
-following sub-directories and files:
+
+    Python:
+        
+        Python 3.x must be installed for running this program. We suggest
+    installing version 3.5 or later. Also, the package 'paramiko' must
+    be installed. To see if paramiko is installed, open a terminal
+    (powershell if on Windows), and type 'pip show paramiko'. If it's 
+    installed, you should see the package details. Otherwise, you can 
+    install paramiko with the following command: 'pip install paramiko'. 
+
+    
+    ACISS:
+
+        In order to successfully run the BRAT pipeline, 
+    a directory must be created on ACISS that contains the 
+    following sub-directories and files:
     
     sub-directories:
         <fastq_files>     This directory contains the fastq files
@@ -26,9 +39,9 @@ following sub-directories and files:
         
         <BS_genome_fasta> This is a directory containing supercontig
                           files. IMPORTANT: The name of this directory
-                          must be exactly as depcited, or the pipeline
-                          will not correctly run without altering 
-                          the source code. 
+                          must be exactly as depcited (the text between 
+                          the <> symbols), or the pipeline will not 
+                          correctly run without altering the source code. 
                           
         <genome>     	  This is the genome that you wish to use
                           for the bisulfite mapping. There is an 
@@ -44,13 +57,14 @@ following sub-directories and files:
                           who are familiar with python and modular 
                           programming. 
 
-        <analyzing.py>    This is the source cod for the second step
+        <analyzing.py>    This is the source code for the second step
                           in the bisulfite mapping. Again, this file 
                           should only be altered by those familiar with
                           python and modularity. 
 
         <mappedDupl>      IMPORTANT: This file must be named exactly 
-                          as shown, and its contents must be as follows:
+                          as shown (that is, the text between the <> symbols), 
+                          and its contents must be as follows:
                           
                           ./BSmapped.txt
  
@@ -60,7 +74,8 @@ following sub-directories and files:
                           results. 
                              
         <mappedNoDupl>    IMPORTANT: This file must be named exactly 
-                          as shown, and its contents must be as follows:
+                          as shown (the text between the <> symbols), and 
+                          its contents must be as follows:
                           
                           ./BSmapped.txt.nodupl
  
@@ -71,17 +86,17 @@ following sub-directories and files:
         
         <Nc12genome>      This file contains the path to all of the
                           supercontig files. IMPORTANT: This file must
-                          be named excactly as shown, or the program will
-                          not run correctly without altering the source 
-                          code. 
+                          be named excactly as shown (the text between the
+                          <> symbols), or the program will not run correctly 
+                          without altering the source code. 
         
         <bratPipe.pbs>    This file evokes the bisulfiteMap.py and 
                           analyzing.py programs given specific terminal
                           arguments. IMPORTANT: This file must be named
-                          exactly as shown, and the contents must be 
-                          as follows (note that <directory_path> should
-                          be replaced with the path to the pipeline
-                          directory):
+                          exactly as shown (the text between the <> symbols), 
+                          and the contents must be as follows (note that 
+                          <directory_path> should be replaced with the path 
+                          to the pipeline directory):
 
                           #!/bin/bash 
                           #PBS -q generic
@@ -104,9 +119,9 @@ following sub-directories and files:
 
         ACISS password:        If your ACISS account is set up for login without password 
                                verification, this window can be left empty. Otherwise, 
-                               you must enter you password. 
+                               you must enter your password. 
 
-        BRAT genome directory: This is the name of the genome directory title <genome> above. 
+        BRAT genome directory: This is the name of the genome directory, titled <genome> above. 
              
         fastq directory:       This is the directory containing the fastq files that you 
                                wish to send through the bisulfite mapping, titled
@@ -115,7 +130,7 @@ following sub-directories and files:
         results directory:     This is the directory that will contain the final results of
                                the two protocols contained in analyzing.py and bisulfiteMap.py. 
                                You may name this directory whatever you wish upon execution. 
-                               When the execution has completed, this results directory will
+                               When the execution has completed, the results directory will
                                contain the following three subdirectories:
                                5mCAverages, mergedFiles, and wigFiles.
                                The files within mergedFiles are primarily for use further down
@@ -145,10 +160,33 @@ following sub-directories and files:
                                are those which appeared to be of temporary use within the protocol. 
                                Therefore, this box is checked by default.
 
-    Notes:
+
+    Miscellaneous:
+
         Every time the a qsub job is run, there are 2 output files created as records
     from the job. Currently, these files are not removed with the 'remove extra output'
     option. These files contain records of the processes which can be looked over after
     the jobs have finished execution and are very helpful for determining problems that
     may have occurred. That being said, you'll probably want to remove them or they will 
     continue building up. 
+        
+        The ACISS path for running the pipeline is currently hardcoded into the run_pipeline
+    functions. If you'd like to change this path in the future, you can do so by altering 
+    the string in the command variable (there is a comment above this variable flagging 
+    it as the path variable). The path variable appears as follows:
+        
+        command = ("(cd current_path; qsub -M {} -v vars... pbs_file)".format(inserts...))
+
+    The only aspect of this string you should alter is the current_path, which will be
+    a directory path. Another option is to extend the existing code to take in a path as a
+    variable. There are pros and cons to doing this, and I would suggest only manipulating
+    the code if you are familiar with python and modular programming. 
+
+
+        A note on extending the python module: it would be advantageous to have the modules
+    create the mappedDupl and mappedNoDupl files if they do not exist and populate them
+    with their needed text. However, for some reason or other, the brat module on ACISS
+    seems to completely dismiss the text in these files if they have been created by piping 
+    the text into them through the script. I did not resolve why this was the case. So, as
+    a warning, expect that the output will be incorrect if you try this approach, and 
+    proceed with caution in trying other methods of automating this portion of the protocol. 
