@@ -4,11 +4,8 @@ __description__ = "Main class to launch a pipeline notebook."
 
 from masterNotebook import masterNotebook
 from bratFrame import BratInterface
-from comparison_gui import MethCompInterface
-from convert_gui import MethConvInterface
 from tkinter import Tk
 from map_reads_Frame import ChipInterface
-from averag_meth_Frame import AvgMethInterface
 from meth_pipe_gui import MethInterface
 
 if __name__ == "__main__":
