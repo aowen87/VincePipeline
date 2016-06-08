@@ -1,4 +1,4 @@
-__author__ = 'Hiranmayi Duvvuri'
+__author__ = 'Hiranmayi Duvvuri, Pat Johnson'
 __date__ = '06/01/2016'
 __description__ = """
 GUI for part of methylation pipeline.
