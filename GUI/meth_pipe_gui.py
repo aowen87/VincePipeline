@@ -5,7 +5,7 @@ GUI for part of methylation pipeline.
 """
 
 from tkinter import *
-from tkinter.ttk import *
+from tkinter.ttk import Notebook, Frame
 from paramiko import *
 from interface_class import Interface
 
@@ -213,13 +213,3 @@ class MethInterface(Interface):
             self.aciss_connect(command, username, password)
         else:
             self._message_txt.insert(INSERT, "All entry windows must be filled\n") 
-
-if __name__ == "__main__":
-    '''
-    Create and launch a notebook containing several
-    pipeline widgets that connect to the ACISS server. 
-    '''
-    root = Tk()
-    root.wm_title('TEST')
-    MethInterface(root).pack()
-    root.mainloop()
