@@ -51,6 +51,7 @@ class AvgMethInterface(Interface):
 		self._window_entry				= Entry(self, bd=5)
 		
 		Start							= Button(self, text='RUN PIPELINE', font=cur_font, command=self.runPipe)
+		self._user_name_entry.focus_set()
 	
 		#GUI structure
 		

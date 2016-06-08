@@ -56,6 +56,7 @@ class ChipInterface(Interface):
 		genome_description.grid(row=5,column=0, sticky=N+E+S+W, padx=PADX+5, pady=2,columnspan=2)
 		progress_box.grid(row=6, column=0, sticky=N+E+S+W, padx=PADX+5, pady=PADY,columnspan=2)
 		Start.grid(row=7, column=1, sticky=E, padx=50, pady=PADY)
+		self._user_name_entry.focus_set()
 	
 	
 	def initiatePipe(self):
@@ -69,7 +70,6 @@ class ChipInterface(Interface):
 		self._genome			= self._genome_entry.get()
 		self._usrname			= self._user_name_entry.get()
 		self._password 			= self._password_entry
-		 
 		vars = [self._usrname, self._genome, self._chip_directory]
 		
 		for var in vars:
