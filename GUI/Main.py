@@ -9,6 +9,7 @@ from convert_gui import MethConvInterface
 from tkinter import Tk
 from map_reads_Frame import ChipInterface
 from averag_meth_Frame import AvgMethInterface
+from meth_pipe_gui import MethInterface
 
 if __name__ == "__main__":
     '''
@@ -19,14 +20,10 @@ if __name__ == "__main__":
     root.wm_title('ACISS Pipelines')
     notebook     = masterNotebook(root)
     brat_pipe    = BratInterface(notebook)
-    meth_compare = MethCompInterface(notebook)
-    meth_convert = MethConvInterface(notebook)
-    meth_avg     = AvgMethInterface(notebook)
+    meth_pipe    = MethInterface(notebook)
     chip_seq     = ChipInterface(notebook)
     notebook.addFrame(brat_pipe, 'BRAT Pipe')
-    notebook.addFrame(meth_convert, 'Meth Conversion Pipe')
-    notebook.addFrame(meth_compare, 'Meth Comparison Pipe')
-    notebook.addFrame(meth_avg, 'Meth Averages')
+    notebook.addFrame(meth_pipe, 'Methylation Pipeline')
     notebook.addFrame(chip_seq, 'ChIP-seq Analysis')
     root.mainloop()
     
