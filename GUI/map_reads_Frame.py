@@ -28,7 +28,7 @@ class ChipInterface(Interface):
 		scroll = Scrollbar(progress_box)
 		scroll.pack(side=RIGHT, fill=Y)
 		self._message_text = Text(progress_box, height=7)
-		self._message_text.config(state=DISABLED)
+		#self._message_text.config(state=DISABLED)
 		self._message_text.pack(fill = X)
 
 		#Labels and entries	   
