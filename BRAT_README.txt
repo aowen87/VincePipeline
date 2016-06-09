@@ -1,6 +1,6 @@
 ----------------------------BRAT-BW pipe------------------------------
 Author:  Alister Maguire
-contact: aom@uoregon.edu
+contact: aom@uoregon.edu or alisterowen@hotmail.com
 
     This pipeline contains the first two sections from Mike Rountree's
 BS-seq protocol. The first section, titled "Commands to run BRAT-BW to 
@@ -22,7 +22,39 @@ Set-up:
     installed, you should see the package details. Otherwise, you can 
     install paramiko with the following command: 'pip install paramiko'. 
 
+
+
+    ACISS path:
+
+        Before getting started, you will want to choose a directory within
+    ACISS that will be the home for running computations and retrieving 
+    your results. You can choose this directory to be wherever you'd like, 
+    but be sure to make note of the path. For example, your path may look 
+    something like /myPipeline.
+        Once you have decided on a path, you will need to add this path to 
+    two files. First, this path must be included in the pbs file titled
+    "bratPipe.pbs". See the section "ACISS: files:" below to inspect the 
+    full contents of the pbs file and where the path needs to be inserted
+    or updated. Next, you must add/update the path within a python file named
+    "bratFrame.py" (located in the GUI folder on GitHub). Within this file, 
+    you will see a function named run_pipeline. Within this function, 
+    you will find the following comment:
     
+    #The ACISS path is below between 'cd' and ';'. If you wish
+    #to alter the path, change this section of the string.
+
+    Directly below this comment, you will find a line of code that follows 
+    the following format:
+
+    command = ("(cd current_path; qsub -M {} -v vars... pbs_file)".format(inserts...))
+    
+    In reality, this will likely span several lines, but you will only be 
+    interested in the first. As the comment specifies, you will want to 
+    replace 'current_path' with your path. If your chosen path was '/myPipeline',
+    you would replace 'current_path' with '/myPipeline'. 
+
+
+
     ACISS:
 
         In order to successfully run the BRAT pipeline, 
@@ -107,7 +139,10 @@ Set-up:
                           python3 bisulfiteMap.py ${brat} ${fastq} ${build} ${mismatch} ${score}  
                           python3 analyzing.py ${map} ${res} ${clean} 
 
+
+
     GUI Usage:
+
              The pipline is currently set-up to run through the given GUI, so this is 
         what will be explained regarding usage. 
 
@@ -161,6 +196,7 @@ Set-up:
                                Therefore, this box is checked by default.
 
 
+
     Miscellaneous:
 
         Every time the a qsub job is run, there are 2 output files created as records
@@ -171,16 +207,13 @@ Set-up:
     continue building up. 
         
         The ACISS path for running the pipeline is currently hardcoded into the run_pipeline
-    functions. If you'd like to change this path in the future, you can do so by altering 
-    the string in the command variable (there is a comment above this variable flagging 
-    it as the path variable). The path variable appears as follows:
-        
-        command = ("(cd current_path; qsub -M {} -v vars... pbs_file)".format(inserts...))
-
-    The only aspect of this string you should alter is the current_path, which will be
-    a directory path. Another option is to extend the existing code to take in a path as a
-    variable. There are pros and cons to doing this, and I would suggest only manipulating
-    the code if you are familiar with python and modular programming. 
+    functions and the pbs files. If you'd like to change this path in the future, you can 
+    do so by changing the path in the pbs file and the path located in the python file titled
+    "bratFrame.py". Refer to the section "Set-up: ACISS path:" for instructions on 
+    how to update this path manually.  
+        Another option is to extend the existing code to take in a path as a variable. There 
+    are pros and cons to doing this, and I would suggest only manipulating the code if you 
+    are familiar with python and modular programming. 
 
 
         A note on extending the python module: it would be advantageous to have the modules
