@@ -4,7 +4,6 @@ __description__ = """The GUI for the launching and running bisulfiteMap.py
 and analyzing.py as a single pipeline. """
 
 from tkinter import *
-#from tkinter import font
 from tkinter.ttk import *
 from paramiko import *
 from interface_class import Interface
@@ -20,40 +19,39 @@ class BratInterface(Interface):
         #fonts, colors, padding, etc. 
         ENTRY_W = 30
         PADX    = 2
-        PADY    = 9
-        #cur_font     = font.Font(family="Courier New", size=13, weight="bold")
-        progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
+        PADY    = 4
+        progress_box = Frame(self, relief=SUNKEN, borderwidth=5)
         scroll       = Scrollbar(progress_box)
         scroll.pack(side=RIGHT, fill=Y)
         self._message_txt = Text(progress_box, height=7)
         self._message_txt.pack()
 
         #Labels and entries    
-        email_label              = Label(self, padx=PADX, pady=PADY, text="Email: ")
+        email_label              = Label(self, text="Email: ")
         self._email_entry        = Entry(self, width=ENTRY_W)
-        usr_name_label           = Label(self, padx=PADX, pady=PADY, text="ACISS user name: ")
+        usr_name_label           = Label(self, text="ACISS user name: ")
         self._usr_name_entry     = Entry(self, width=ENTRY_W)
-        pswd_label               = Label(self, padx=PADX, pady=PADY, text="ACISS password: ")
+        pswd_label               = Label(self, text="ACISS password: ")
         self._pswd_entry         = Entry(self, show='*', width=ENTRY_W)
-        brat_dir_label           = Label(self, padx=PADX, pady=PADY, text="BRAT genome directory: ")
+        brat_dir_label           = Label(self, text="BRAT genome directory: ")
         self._brat_dir_entry     = Entry(self, width=ENTRY_W)
-        fastq_label              = Label(self, padx=PADX, pady=PADY, text="fastq directory: ")
+        fastq_label              = Label(self, text="fastq directory: ")
         self._fastq_entry        = Entry(self, width=ENTRY_W)
-        analyzed_res_label       = Label(self, padx=PADX, pady=PADY, text="results directory: ")
+        analyzed_res_label       = Label(self, text="results directory: ")
         self._analyzed_res_entry = Entry(self, width=ENTRY_W)
-        mistmatch_label          = Label(self, padx=2, pady=PADY, text="non-BS mismatches: ")
+        mistmatch_label          = Label(self, text="non-BS mismatches: ")
         self._mismatch_entry     = Entry(self, width=10)
         self._mismatch_entry.insert(END, '2')
-        quality_label            = Label(self, padx=2, pady=PADY, text="quality score: ")
+        quality_label            = Label(self, text="quality score: ")
         self._quality_entry      = Entry(self, width=10)
         self._quality_entry.insert(END, '20')
         self._build_check_var    = IntVar()
         build_check              = Checkbutton(self, text="build genome", variable=self._build_check_var,
-                                              onvalue=1, offvalue=0, height=5, width=20)
+                                              onvalue=1, offvalue=0)
         self._clean_check_var    = IntVar()
         self._clean_check_var.set(1)
         clean_check              = Checkbutton(self, text="remove extra output", variable=self._clean_check_var,
-                                              onvalue=1, offvalue=0, height=5, width=20)
+                                              onvalue=1, offvalue=0)
         start                    = Button(self, text='RUN PIPELINE', command=self.run_pipeline)
         self._email_entry.focus_set()
        

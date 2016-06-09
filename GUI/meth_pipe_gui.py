@@ -20,7 +20,7 @@ class MethInterface(Interface):
         width = 41
         border = 5
         style = Style()
-        style.theme_use('classic')
+        #style.theme_use('classic')
 
         # ACISS connect widgets
         userlabel = Label(self, text = 'ACISS user name: ')
@@ -59,7 +59,7 @@ class MethInterface(Interface):
         progress_box = Frame(self, relief = SUNKEN, borderwidth = 5)
         scroll = Scrollbar(progress_box)
         scroll.pack(side = RIGHT, fill = Y)
-        self._message_txt = Text(progress_box, height = 8)
+        self._message_txt = Text(progress_box, height = 7)
         self._message_txt.pack()
 
         masternb = Notebook(self)

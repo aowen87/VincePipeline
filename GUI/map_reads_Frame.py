@@ -1,10 +1,8 @@
 '''
 Created on May 17, 2016
-
 @author: Alister Maguire, Pat Johnson
 '''
 from tkinter import *
-#from tkinter import font
 from tkinter.ttk import *
 from paramiko import *
 from interface_class import Interface
@@ -25,23 +23,22 @@ class ChipInterface(Interface):
 		#fonts, colors, padding, etc. 
 		PADX = 2
 		PADY = 11
-		#cur_font = font.Font(family="Courier New", size=13, weight="bold")
-		progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
+		progress_box = Frame(self, relief=SUNKEN, borderwidth=5)
 		scroll = Scrollbar(progress_box)
 		scroll.pack(side=RIGHT, fill=Y)
 		self._message_text = Text(progress_box, height=7)
 		self._message_text.pack()
 
 		#Labels and entries	   
-		user_name_label					= Label(self, padx=PADX, pady=PADY, text="ACISS user name: ")
+		user_name_label					= Label(self, text="ACISS user name: ")
 		self._user_name_entry			= Entry(self)
-		pwd_label 						= Label(self, padx=PADX, pady=PADY, text = 'password: ')
+		pwd_label 						= Label(self, text = 'password: ')
 		self._password_entry 			= Entry(self, show = '*')
-		chip_directory_label			= Label(self, padx=PADX, pady=PADY, text="Chip Reads Directory: ")
+		chip_directory_label			= Label(self, text="Chip Reads Directory: ")
 		self._chip_directory_entry		= Entry(self)
-		genome_label					= Label(self, padx=PADX, pady=PADY, text="Genome*: ")
+		genome_label					= Label(self, text="Genome*: ")
 		self._genome_entry				= Entry(self)
-		genome_description 				= Label(self, padx=PADX, pady=PADY, 
+		genome_description 				= Label(self, 
 												text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
 		Start							= Button(self, text='RUN PIPELINE', command=self.run_pipeline)
 
@@ -57,6 +54,7 @@ class ChipInterface(Interface):
 		genome_description.grid(row=5,column=0, sticky=N+E+S+W, padx=PADX+5, pady=2,columnspan=2)
 		progress_box.grid(row=6, column=0, sticky=N+E+S+W, padx=PADX+5, pady=PADY,columnspan=2)
 		Start.grid(row=7, column=1, sticky=E, padx=50, pady=PADY)
+		self._user_name_entry.focus_set()
 	
 	
 	def initiatePipe(self):
@@ -70,7 +68,6 @@ class ChipInterface(Interface):
 		self._genome			= self._genome_entry.get()
 		self._usrname			= self._user_name_entry.get()
 		self._password 			= self._password_entry
-		 
 		vars = [self._usrname, self._genome, self._chip_directory]
 		
 		for var in vars:
@@ -93,9 +90,3 @@ class ChipInterface(Interface):
 		input. 
 		'''
 		self.initiatePipe()
-		
-		
-		
-		
-	
-
