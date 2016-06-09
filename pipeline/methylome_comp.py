@@ -44,10 +44,10 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
             os.system("dmr {}/{}vs{}.methdiff {} {} {}/DMR_{}vs{}_lt_{} {}/DMR_{}vs{}_lt_{}".format(output_dir, s1,
                         s2, wt_hmr, j, output_dir, s1, s2, s1, output_dir, s1, s2, s2))
     else:
-        raise ValueError("please enter a")
+        raise ValueError("please enter a .meth and .hmr file!")
 
 def main():
-    if len(sys.argv) > 4:
+    if len(sys.argv) > 5:
         print("usage: {} <input_dir> <output_dir> <wt_meth> <wt_hmr>".format(sys.argv[0]))
         sys.exit(1)
 
