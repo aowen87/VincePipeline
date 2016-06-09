@@ -79,7 +79,7 @@ class ChipInterface(Interface):
 		if passed:			
 			
 			command = "(cd ChipReads/FinalTest; qsub -v chip_directory={},genome={} chip_pipe.pbs)".format(self._chip_directory, self._genome)
-			self._message_text.insert(INSERT, command)
+			self.insert_text(command, self._message_text)
 			
 			self.aciss_connect(command, self._usrname, self._password)
 		else:

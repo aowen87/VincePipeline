@@ -51,7 +51,7 @@ class Interface(Frame):
             terminalOut = stdout.readlines()
             for line in terminalOut:
                 out = line + '\n'
-                self._message_txt.insert(INSERT, out)
+                self.insert_text(out, self._message_txt)
             client.close()   
         except Exception:
             self.insert_text("ERROR: unable to connect to ACISS...\n", self._message_txt)
