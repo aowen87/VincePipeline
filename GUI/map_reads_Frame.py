@@ -17,13 +17,14 @@ class ChipInterface(Interface):
 		Interface.__init__(self, master)
 		
 		#class variables
-		self._chip_directory	= ''
-		self._genome			= ''
-		self._usrname			= ''
+		self._chip_directory = ''
+		self._genome		 = ''
+		self._usrname		 = ''
 		
 		#fonts, colors, padding, etc. 
-		PADX = 2
-		PADY = 11
+		PADX    = 2
+		PADY    = 11
+		bgColor = 'grey94'
 		cur_font = font.Font(family="Courier New", size=13, weight="bold")
 		progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
 		scroll = Scrollbar(progress_box)
@@ -32,16 +33,16 @@ class ChipInterface(Interface):
 		self._message_text.pack()
 
 		#Labels and entries	   
-		user_name_label					= Label(self, padx=PADX, pady=PADY, text="ACISS user name: ")
+		user_name_label					= Label(self, padx=PADX, pady=PADY, bg=bgColor, text="ACISS user name: ")
 		self._user_name_entry			= Entry(self, bd=5)
-		pwd_label 						= Label(self, padx=PADX, pady=PADY, text = 'password: ')
+		pwd_label 						= Label(self, padx=PADX, pady=PADY, bg=bgColor, text='password: ')
 		self._password_entry 			= Entry(self, bd=5, show = '*')
-		chip_directory_label			= Label(self, padx=PADX, pady=PADY, text="Chip Reads Directory: ")
+		chip_directory_label			= Label(self, padx=PADX, pady=PADY, bg=bgColor, text="Chip Reads Directory: ")
 		self._chip_directory_entry		= Entry(self, bd=5)
-		genome_label					= Label(self, padx=PADX, pady=PADY, text="Genome*: ")
+		genome_label					= Label(self, padx=PADX, pady=PADY, bg=bgColor, text="Genome*: ")
 		self._genome_entry				= Entry(self, bd=5)
-		genome_description 				= Label(self, padx=PADX, pady=PADY, 
-												text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
+		genome_description 				= Label(self, padx=PADX, pady=PADY, bg=bgColor,
+										  text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
 		Start							= Button(self, text='RUN PIPELINE', font=cur_font, command=self.run_pipeline)
 
 		#GUI structure
