@@ -22,7 +22,15 @@ class Interface(Frame):
     def run_pipeline(self):
 
         raise NotImplementedError
-        
+
+    def insert_text(self, string, text_box):
+        """
+        make text box active then disable after adding text.
+        """    
+        text_box.configure(state='normal')
+        text_box.insert(INSERT, string)
+        text_box.configure(state='disabled')
+
 
     def aciss_connect(self, command, username, pswd=None):
         """
@@ -37,8 +45,8 @@ class Interface(Frame):
             client.set_missing_host_key_policy(AutoAddPolicy())
             client.load_system_host_keys()
             client.connect('aciss.uoregon.edu', username=username, password=pswd)
-            self._message_txt.insert(INSERT, "Connected to ACISS!\n")
-            self._message_txt.insert(INSERT, 'running pipeline...\n')
+            self.insert_text("Connected to ACISS!\n", self._message_txt)
+            self.insert_text('running pipeline...\n', self._message_txt)
             stdin, stdout, stderr = client.exec_command(command)
             terminalOut = stdout.readlines()
             for line in terminalOut:
@@ -46,4 +54,5 @@ class Interface(Frame):
                 self._message_txt.insert(INSERT, out)
             client.close()   
         except Exception:
-            self._message_txt.insert(INSERT, "ERROR: unable to connect to ACISS...\n")
+            self.insert_text("ERROR: unable to connect to ACISS...\n", self._message_txt)
+

@@ -118,7 +118,7 @@ class BratInterface(Interface):
      
             self.aciss_connect(command, usrname, pswrd)
         else:
-            self._message_txt.insert(INSERT, "All entry windows must be filled (excluding email and password)\n") 
+            self.insert_text("All entry windows must be filled (excluding email and password)\n", self._message_txt)
        
        
  

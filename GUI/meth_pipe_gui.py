@@ -216,4 +216,4 @@ class MethInterface(Interface):
         if passed:
             self.aciss_connect(command, username, password)
         else:
-            self._message_txt.insert(INSERT, "All entry windows must be filled\n") 
+            self.insert_text("All entry windows must be filled (excluding email and password)\n", self._message_txt)
