@@ -24,6 +24,7 @@ class BratInterface(Interface):
         scroll       = Scrollbar(progress_box)
         scroll.pack(side=RIGHT, fill=Y)
         self._message_txt = Text(progress_box, height=7)
+        self._message_txt.config(state=DISABLED)
         self._message_txt.pack(fill = X)
 
         #Labels and entries    

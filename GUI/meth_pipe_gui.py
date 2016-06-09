@@ -46,6 +46,7 @@ class MethInterface(Interface):
         self._conv_var = BooleanVar()
         conv_check = Checkbutton(self, text = 'Run .meth Conversion', variable = self._conv_var)  
         conv_check.grid(row = 4, column = 0, padx = PADX, pady = PADY)
+        self._conv_var.set(True)
 
         self._comp_var = BooleanVar()
         comp_check = Checkbutton(self, text = 'Run Methylome Comparisons', variable = self._comp_var) 
@@ -59,7 +60,9 @@ class MethInterface(Interface):
         scroll = Scrollbar(progress_box)
         scroll.pack(side = RIGHT, fill = Y)
         self._message_txt = Text(progress_box, height = 7)
+        self._message_txt.config(state=DISABLED)
         self._message_txt.pack(fill = X)
+        self._username.focus_set()
 
         masternb = Notebook(self)
         comp_frame = Frame(masternb, padding = pad)
