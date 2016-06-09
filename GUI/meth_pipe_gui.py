@@ -174,6 +174,7 @@ class MethInterface(Interface):
         password =          self._password.get()
         email =             self._email.get()
 
+        passed = True
         command = '(cd /research/CIS454/vince/pipeline; qsub -M {} -v '.format(email)
         vars = [email, username]
         keys = []
@@ -197,8 +198,6 @@ class MethInterface(Interface):
                      ('meth_convert', 'avg_meth'): ' conv_avg.pbs',
                      ('meth_compare', 'avg_meth'): ' comp_avg.pbs',
                      ('meth_convert', 'meth_compare', 'avg_meth'): ' meth_pipe.pbs'}
-
-        passed = True
 
 
         for i, j in zip([meth_convert, meth_compare, avg_meth], ['meth_convert', 'meth_compare', 'avg_meth']):
