@@ -16,9 +16,9 @@ class ChipInterface(Interface):
 		Interface.__init__(self, master)
 		
 		#class variables
-		self._chip_directory	= ''
-		self._genome			= ''
-		self._usrname			= ''
+		self._chip_directory = ''
+		self._genome		 = ''
+		self._usrname		 = ''
 		
 		#fonts, colors, padding, etc. 
 		PADX = 2
@@ -32,17 +32,17 @@ class ChipInterface(Interface):
 		self._message_text.pack(fill = X)
 
 		#Labels and entries	   
-		user_name_label					= Label(self, text="ACISS user name: ")
-		self._user_name_entry			= Entry(self, width = ENTRY_W)
-		pwd_label 						= Label(self, text = 'password: ')
-		self._password_entry 			= Entry(self, show = '*', width = ENTRY_W)
-		chip_directory_label			= Label(self, text="Chip Reads Directory: ")
-		self._chip_directory_entry		= Entry(self, width = ENTRY_W)
-		genome_label					= Label(self, text="Genome*: ")
-		self._genome_entry				= Entry(self, width = ENTRY_W)
-		genome_description 				= Label(self, 
-												text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
-		Start							= Button(self, text='RUN PIPELINE', command=self.run_pipeline)
+		user_name_label			   = Label(self, text="ACISS user name: ")
+		self._user_name_entry	   = Entry(self, width = ENTRY_W)
+		pwd_label 				   = Label(self, text = 'password: ')
+		self._password_entry 	   = Entry(self, show = '*', width = ENTRY_W)
+		chip_directory_label	   = Label(self, text="Chip Reads Directory: ")
+		self._chip_directory_entry = Entry(self, width = ENTRY_W)
+		genome_label			   = Label(self, text="Genome*: ")
+		self._genome_entry		   = Entry(self, width = ENTRY_W)
+		genome_description 		   = Label(self, 
+									 text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
+		Start					   = Button(self, text='RUN PIPELINE', command=self.run_pipeline)
 
 		#GUI structure
 		user_name_label.grid(row=0, column=0, sticky=W, padx=PADX, pady=PADY)
@@ -66,10 +66,10 @@ class ChipInterface(Interface):
 		'''
 		#Retrieve entries
 		passed = True
-		self._chip_directory	= self._chip_directory_entry.get()
-		self._genome			= self._genome_entry.get()
-		self._usrname			= self._user_name_entry.get()
-		self._password 			= self._password_entry
+		self._chip_directory = self._chip_directory_entry.get()
+		self._genome		 = self._genome_entry.get()
+		self._usrname		 = self._user_name_entry.get()
+		self._password 		 = self._password_entry
 		vars = [self._usrname, self._genome, self._chip_directory]
 		
 		for var in vars:
