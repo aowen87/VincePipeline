@@ -20,6 +20,7 @@ class BratInterface(Interface):
         ENTRY_W = 30
         PADX    = 2
         PADY    = 9
+        bgColor = 'grey94'
         cur_font     = font.Font(family="Courier New", size=13, weight="bold")
         progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
         scroll       = Scrollbar(progress_box)
@@ -28,31 +29,31 @@ class BratInterface(Interface):
         self._message_txt.pack()
 
         #Labels and entries    
-        email_label              = Label(self, padx=PADX, pady=PADY, text="Email: ")
+        email_label              = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="Email: ")
         self._email_entry        = Entry(self, bd=5, width=ENTRY_W)
-        usr_name_label           = Label(self, padx=PADX, pady=PADY, text="ACISS user name: ")
+        usr_name_label           = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="ACISS user name: ")
         self._usr_name_entry     = Entry(self, bd=5, width=ENTRY_W)
-        pswd_label               = Label(self, padx=PADX, pady=PADY, text="ACISS password: ")
+        pswd_label               = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="ACISS password: ")
         self._pswd_entry         = Entry(self, bd=5, show='*', width=ENTRY_W)
         brat_dir_label           = Label(self, padx=PADX, pady=PADY, text="BRAT genome directory: ")
         self._brat_dir_entry     = Entry(self, bd=5, width=ENTRY_W)
-        fastq_label              = Label(self, padx=PADX, pady=PADY, text="fastq directory: ")
+        fastq_label              = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="fastq directory: ")
         self._fastq_entry        = Entry(self, bd=5, width=ENTRY_W)
-        analyzed_res_label       = Label(self, padx=PADX, pady=PADY, text="results directory: ")
+        analyzed_res_label       = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="results directory: ")
         self._analyzed_res_entry = Entry(self, bd=5, width=ENTRY_W)
-        mistmatch_label          = Label(self, padx=2, pady=PADY, text="non-BS mismatches: ")
+        mistmatch_label          = Label(self, padx=2, pady=PADY, bg=bgColor, text="non-BS mismatches: ")
         self._mismatch_entry     = Entry(self, bd=5, width=10)
         self._mismatch_entry.insert(END, '2')
-        quality_label            = Label(self, padx=2, pady=PADY, text="quality score: ")
+        quality_label            = Label(self, padx=2, pady=PADY, bg=bgColor, text="quality score: ")
         self._quality_entry      = Entry(self, width=10, bd=5)
         self._quality_entry.insert(END, '20')
         self._build_check_var    = IntVar()
         build_check              = Checkbutton(self, text="build genome", variable=self._build_check_var,
-                                              onvalue=1, offvalue=0, height=5, width=20)
+                                              onvalue=1, offvalue=0,bg=bgColor, height=5, width=20)
         self._clean_check_var    = IntVar()
         self._clean_check_var.set(1)
         clean_check              = Checkbutton(self, text="remove extra output", variable=self._clean_check_var,
-                                              onvalue=1, offvalue=0, height=5, width=20)
+                                              onvalue=1, offvalue=0, bg=bgColor, height=5, width=20)
         start                    = Button(self, text='RUN PIPELINE', font=cur_font, command=self.run_pipeline)
         self._email_entry.focus_set()
        
@@ -111,6 +112,8 @@ class BratInterface(Interface):
                 passed = False
                                
         if passed:
+            #The ACISS path is below between 'cd' and ';'. If you wish
+            #to alter the path, change this section of the string. 
             command = ("(cd /research/CIS454/vince/pipeline; qsub -M {} -v brat={},fastq={},"
             "build={},mismatch={},score={},res={},clean={},map='mapResults' bratPipe.pbs)".format(email, 
             BRAT_genome_dir, fastq_dir, build_genome, mismatches, quality_score, 
