@@ -60,7 +60,7 @@ class MethInterface(Interface):
         scroll = Scrollbar(progress_box)
         scroll.pack(side = RIGHT, fill = Y)
         self._message_txt = Text(progress_box, height = 7)
-        #self._message_txt.config(state=DISABLED)
+        self._message_txt.config(state=DISABLED)
         self._message_txt.pack(fill = X)
         self._username.focus_set()
 
@@ -216,4 +216,4 @@ class MethInterface(Interface):
         if passed:
             self.aciss_connect(command, username, password)
         else:
-            self._message_txt.insert(INSERT, "All entry windows must be filled\n") 
+            self.insert_text("All entry windows must be filled (excluding email and password)\n", self._message_txt)

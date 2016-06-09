@@ -24,7 +24,7 @@ class BratInterface(Interface):
         scroll       = Scrollbar(progress_box)
         scroll.pack(side=RIGHT, fill=Y)
         self._message_txt = Text(progress_box, height=7)
-        #self._message_txt.config(state=DISABLED)
+        self._message_txt.config(state=DISABLED)
         self._message_txt.pack(fill = X)
 
         #Labels and entries    
@@ -118,7 +118,7 @@ class BratInterface(Interface):
      
             self.aciss_connect(command, usrname, pswrd)
         else:
-            self._message_txt.insert(INSERT, "All entry windows must be filled (excluding email and password)\n") 
+            self.insert_text("All entry windows must be filled (excluding email and password)\n", self._message_txt)
        
        
  

@@ -27,9 +27,9 @@ class ChipInterface(Interface):
 		progress_box = Frame(self, relief=SUNKEN, borderwidth=5)
 		scroll = Scrollbar(progress_box)
 		scroll.pack(side=RIGHT, fill=Y)
-		self._message_text = Text(progress_box, height=7)
-		#self._message_text.config(state=DISABLED)
-		self._message_text.pack(fill = X)
+		self._message_txt = Text(progress_box, height=7)
+		self._message_txt.config(state=DISABLED)
+		self._message_txt.pack(fill = X)
 
 		#Labels and entries	   
 		user_name_label			   = Label(self, text="ACISS user name: ")
@@ -83,7 +83,7 @@ class ChipInterface(Interface):
 			
 			self.aciss_connect(command, self._usrname, self._password)
 		else:
-			self._message_text.insert(INSERT, "All entry windows must be filled\n") 
+			self.insert_text("All entry windows must be filled (excluding email and password)\n", self._message_txt)
 	
 	
 	def run_pipeline(self):
