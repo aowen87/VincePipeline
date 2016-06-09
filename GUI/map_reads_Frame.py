@@ -1,10 +1,9 @@
 '''
 Created on May 17, 2016
-
 @author: Alister Maguire, Pat Johnson
 '''
 from tkinter import *
-from tkinter import font
+from tkinter.ttk import *
 from paramiko import *
 from interface_class import Interface
 
@@ -17,46 +16,46 @@ class ChipInterface(Interface):
 		Interface.__init__(self, master)
 		
 		#class variables
-		self._chip_directory = ''
-		self._genome		 = ''
-		self._usrname		 = ''
+		self._chip_directory	= ''
+		self._genome			= ''
+		self._usrname			= ''
 		
 		#fonts, colors, padding, etc. 
-		PADX    = 2
-		PADY    = 11
-		bgColor = 'grey94'
-		cur_font = font.Font(family="Courier New", size=13, weight="bold")
-		progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
+		PADX = 2
+		PADY = 4
+		ENTRY_W = 30
+		progress_box = Frame(self, relief=SUNKEN, borderwidth=5)
 		scroll = Scrollbar(progress_box)
 		scroll.pack(side=RIGHT, fill=Y)
 		self._message_text = Text(progress_box, height=7)
-		self._message_text.pack()
+		self._message_text.config(state=DISABLED)
+		self._message_text.pack(fill = X)
 
 		#Labels and entries	   
-		user_name_label					= Label(self, padx=PADX, pady=PADY, bg=bgColor, text="ACISS user name: ")
-		self._user_name_entry			= Entry(self, bd=5)
-		pwd_label 						= Label(self, padx=PADX, pady=PADY, bg=bgColor, text='password: ')
-		self._password_entry 			= Entry(self, bd=5, show = '*')
-		chip_directory_label			= Label(self, padx=PADX, pady=PADY, bg=bgColor, text="Chip Reads Directory: ")
-		self._chip_directory_entry		= Entry(self, bd=5)
-		genome_label					= Label(self, padx=PADX, pady=PADY, bg=bgColor, text="Genome*: ")
-		self._genome_entry				= Entry(self, bd=5)
-		genome_description 				= Label(self, padx=PADX, pady=PADY, bg=bgColor,
-										  text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
-		Start							= Button(self, text='RUN PIPELINE', font=cur_font, command=self.run_pipeline)
+		user_name_label					= Label(self, text="ACISS user name: ")
+		self._user_name_entry			= Entry(self, width = ENTRY_W)
+		pwd_label 						= Label(self, text = 'password: ')
+		self._password_entry 			= Entry(self, show = '*', width = ENTRY_W)
+		chip_directory_label			= Label(self, text="Chip Reads Directory: ")
+		self._chip_directory_entry		= Entry(self, width = ENTRY_W)
+		genome_label					= Label(self, text="Genome*: ")
+		self._genome_entry				= Entry(self, width = ENTRY_W)
+		genome_description 				= Label(self, 
+												text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
+		Start							= Button(self, text='RUN PIPELINE', command=self.run_pipeline)
 
 		#GUI structure
-		user_name_label.grid(row=0, column=0, sticky=W, padx=PADX+30)
-		self._user_name_entry.grid(row=0, column=1, sticky=W, padx=PADX+30)
-		pwd_label.grid(row = 1, column = 0, sticky=W, padx=PADX+30)
-		self._password_entry.grid(row = 1, column = 1, sticky=W, padx=PADX+30)
-		chip_directory_label.grid(row=2, column=0, sticky=W, padx=PADX+30)
-		self._chip_directory_entry.grid(row=2, column=1, sticky=W, padx=PADX+30)
-		genome_label.grid(row=3, column=0, sticky=W, padx=PADX+30)
-		self._genome_entry.grid(row=3, column=1, sticky=W, padx=PADX+30)
-		genome_description.grid(row=5,column=0, sticky=N+E+S+W, padx=PADX+5, pady=2,columnspan=2)
-		progress_box.grid(row=6, column=0, sticky=N+E+S+W, padx=PADX+5, pady=PADY,columnspan=2)
-		Start.grid(row=7, column=1, sticky=E, padx=50, pady=PADY)
+		user_name_label.grid(row=0, column=0, sticky=W, padx=PADX, pady=PADY)
+		self._user_name_entry.grid(row=0, column=1, sticky=W, padx=PADX, pady=PADY)
+		pwd_label.grid(row = 1, column = 0, sticky=W, padx=PADX, pady=PADY)
+		self._password_entry.grid(row = 1, column = 1, sticky=W, padx=PADX, pady=PADY)
+		chip_directory_label.grid(row=2, column=0, sticky=W, padx=PADX, pady=PADY)
+		self._chip_directory_entry.grid(row=2, column=1, sticky=W, padx=PADX, pady=PADY)
+		genome_label.grid(row=3, column=0, sticky=W, padx=PADX, pady=PADY)
+		self._genome_entry.grid(row=3, column=1, sticky=W, padx=PADX, pady=PADY)
+		genome_description.grid(row=5,column=0, sticky=N+E+S+W, padx=PADX, pady=PADY,columnspan=2)
+		progress_box.grid(row=6, column=0, sticky=N+E+S+W, padx=PADX, pady=PADY,columnspan=2)
+		Start.grid(row=7, column=1, sticky=E, padx=PADX, pady=PADY)
 		self._user_name_entry.focus_set()
 	
 	
@@ -93,9 +92,3 @@ class ChipInterface(Interface):
 		input. 
 		'''
 		self.initiatePipe()
-		
-		
-		
-		
-	
-
