@@ -4,7 +4,8 @@ Created on May 17, 2016
 @author: Alister Maguire, Pat Johnson
 '''
 from tkinter import *
-from tkinter import font
+#from tkinter import font
+from tkinter.ttk import *
 from paramiko import *
 from interface_class import Interface
 
@@ -24,7 +25,7 @@ class ChipInterface(Interface):
 		#fonts, colors, padding, etc. 
 		PADX = 2
 		PADY = 11
-		cur_font = font.Font(family="Courier New", size=13, weight="bold")
+		#cur_font = font.Font(family="Courier New", size=13, weight="bold")
 		progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
 		scroll = Scrollbar(progress_box)
 		scroll.pack(side=RIGHT, fill=Y)
@@ -33,16 +34,16 @@ class ChipInterface(Interface):
 
 		#Labels and entries	   
 		user_name_label					= Label(self, padx=PADX, pady=PADY, text="ACISS user name: ")
-		self._user_name_entry			= Entry(self, bd=5)
+		self._user_name_entry			= Entry(self)
 		pwd_label 						= Label(self, padx=PADX, pady=PADY, text = 'password: ')
-		self._password_entry 			= Entry(self, bd=5, show = '*')
+		self._password_entry 			= Entry(self, show = '*')
 		chip_directory_label			= Label(self, padx=PADX, pady=PADY, text="Chip Reads Directory: ")
-		self._chip_directory_entry		= Entry(self, bd=5)
+		self._chip_directory_entry		= Entry(self)
 		genome_label					= Label(self, padx=PADX, pady=PADY, text="Genome*: ")
-		self._genome_entry				= Entry(self, bd=5)
+		self._genome_entry				= Entry(self)
 		genome_description 				= Label(self, padx=PADX, pady=PADY, 
 												text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
-		Start							= Button(self, text='RUN PIPELINE', font=cur_font, command=self.run_pipeline)
+		Start							= Button(self, text='RUN PIPELINE', command=self.run_pipeline)
 
 		#GUI structure
 		user_name_label.grid(row=0, column=0, sticky=W, padx=PADX+30)

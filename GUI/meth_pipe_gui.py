@@ -5,8 +5,7 @@ GUI for part of methylation pipeline.
 """
 
 from tkinter import *
-from tkinter.ttk import Notebook, Frame
-from paramiko import *
+from tkinter.ttk import *
 from interface_class import Interface
 
 class MethInterface(Interface):
@@ -16,12 +15,15 @@ class MethInterface(Interface):
 
         # Style
         padx = 2
-        pady = 8
+        pady = 4
         pad = '0.2i'
         width = 41
+        border = 5
+        style = Style()
+        style.theme_use('classic')
 
         # ACISS connect widgets
-        userlabel = Label(self, text = 'ACISS Username: ')
+        userlabel = Label(self, text = 'ACISS user name: ')
         userlabel.grid(row = 0, column = 0, sticky = W, padx = padx, pady = pady)
 
         self._username = Entry(self)
@@ -54,7 +56,7 @@ class MethInterface(Interface):
         avg_check = Checkbutton(self, text = 'Run Average Methylations', variable = self._avg_var)  
         avg_check.grid(row = 4, column = 2, padx = padx, pady = pady)
 
-        progress_box = Frame(self)
+        progress_box = Frame(self, relief = SUNKEN, borderwidth = 5)
         scroll = Scrollbar(progress_box)
         scroll.pack(side = RIGHT, fill = Y)
         self._message_txt = Text(progress_box, height = 8)
@@ -146,29 +148,29 @@ class MethInterface(Interface):
     def run_pipeline(self):
 
         # pipeline checkboxes
-        meth_convert = self._conv_var.get()
-        meth_compare = self._comp_var.get()
-        avg_meth = self._avg_var.get()
+        meth_convert =      self._conv_var.get()
+        meth_compare =      self._comp_var.get()
+        avg_meth =          self._avg_var.get()
 
         # methylation file conversion variables
-        convert_input = self._conv_input_entry.get()
-        convert_output = self._conv_output_entry.get()
+        convert_input =     self._conv_input_entry.get()
+        convert_output =    self._conv_output_entry.get()
 
         # methylome comparison variables
-        comp_input = self._comp_input_entry.get()
-        comp_output = self._comp_output_entry.get()
-        wt_meth = self._wt_meth_entry.get()
-        wt_hmr = self._wt_hmr_entry.get()
+        comp_input =        self._comp_input_entry.get()
+        comp_output =       self._comp_output_entry.get()
+        wt_meth =           self._wt_meth_entry.get()
+        wt_hmr =            self._wt_hmr_entry.get()
 
         # average methylation variables
-        text_directory = self._text_directory_entry.get()
-        roi = self._roi_entry.get()
-        linkage = self._linkage_entry.get()
-        window = self._window_entry.get()
+        text_directory =    self._text_directory_entry.get()
+        roi =               self._roi_entry.get()
+        linkage =           self._linkage_entry.get()
+        window =            self._window_entry.get()
 
-        username = self._username.get()
-        password = self._password.get()
-        email = self._email.get()
+        username =          self._username.get()
+        password =          self._password.get()
+        email =             self._email.get()
 
         command = '(cd /research/CIS454/vince/pipeline; qsub -M {} -v '.format(email)
         vars = [email, username]
