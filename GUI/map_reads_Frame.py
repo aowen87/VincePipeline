@@ -22,38 +22,39 @@ class ChipInterface(Interface):
 		
 		#fonts, colors, padding, etc. 
 		PADX = 2
-		PADY = 11
+		PADY = 4
+		ENTRY_W = 30
 		progress_box = Frame(self, relief=SUNKEN, borderwidth=5)
 		scroll = Scrollbar(progress_box)
 		scroll.pack(side=RIGHT, fill=Y)
 		self._message_text = Text(progress_box, height=7)
-		self._message_text.pack()
+		self._message_text.pack(fill = X)
 
 		#Labels and entries	   
 		user_name_label					= Label(self, text="ACISS user name: ")
-		self._user_name_entry			= Entry(self)
+		self._user_name_entry			= Entry(self, width = ENTRY_W)
 		pwd_label 						= Label(self, text = 'password: ')
-		self._password_entry 			= Entry(self, show = '*')
+		self._password_entry 			= Entry(self, show = '*', width = ENTRY_W)
 		chip_directory_label			= Label(self, text="Chip Reads Directory: ")
-		self._chip_directory_entry		= Entry(self)
+		self._chip_directory_entry		= Entry(self, width = ENTRY_W)
 		genome_label					= Label(self, text="Genome*: ")
-		self._genome_entry				= Entry(self)
+		self._genome_entry				= Entry(self, width = ENTRY_W)
 		genome_description 				= Label(self, 
 												text = "	*If building a genome, pass the name of a fasta file.  Otherwise a genome directory" )
 		Start							= Button(self, text='RUN PIPELINE', command=self.run_pipeline)
 
 		#GUI structure
-		user_name_label.grid(row=0, column=0, sticky=W, padx=PADX+30)
-		self._user_name_entry.grid(row=0, column=1, sticky=W, padx=PADX+30)
-		pwd_label.grid(row = 1, column = 0, sticky=W, padx=PADX+30)
-		self._password_entry.grid(row = 1, column = 1, sticky=W, padx=PADX+30)
-		chip_directory_label.grid(row=2, column=0, sticky=W, padx=PADX+30)
-		self._chip_directory_entry.grid(row=2, column=1, sticky=W, padx=PADX+30)
-		genome_label.grid(row=3, column=0, sticky=W, padx=PADX+30)
-		self._genome_entry.grid(row=3, column=1, sticky=W, padx=PADX+30)
-		genome_description.grid(row=5,column=0, sticky=N+E+S+W, padx=PADX+5, pady=2,columnspan=2)
-		progress_box.grid(row=6, column=0, sticky=N+E+S+W, padx=PADX+5, pady=PADY,columnspan=2)
-		Start.grid(row=7, column=1, sticky=E, padx=50, pady=PADY)
+		user_name_label.grid(row=0, column=0, sticky=W, padx=PADX, pady=PADY)
+		self._user_name_entry.grid(row=0, column=1, sticky=W, padx=PADX, pady=PADY)
+		pwd_label.grid(row = 1, column = 0, sticky=W, padx=PADX, pady=PADY)
+		self._password_entry.grid(row = 1, column = 1, sticky=W, padx=PADX, pady=PADY)
+		chip_directory_label.grid(row=2, column=0, sticky=W, padx=PADX, pady=PADY)
+		self._chip_directory_entry.grid(row=2, column=1, sticky=W, padx=PADX, pady=PADY)
+		genome_label.grid(row=3, column=0, sticky=W, padx=PADX, pady=PADY)
+		self._genome_entry.grid(row=3, column=1, sticky=W, padx=PADX, pady=PADY)
+		genome_description.grid(row=5,column=0, sticky=N+E+S+W, padx=PADX, pady=PADY,columnspan=2)
+		progress_box.grid(row=6, column=0, sticky=N+E+S+W, padx=PADX, pady=PADY,columnspan=2)
+		Start.grid(row=7, column=1, sticky=E, padx=PADX, pady=PADY)
 		self._user_name_entry.focus_set()
 	
 	

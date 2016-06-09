@@ -12,7 +12,7 @@ class masterNotebook(ttk.Notebook):
     '''
     
     def __init__(self, master):
-        ttk.Notebook.__init__(self, master, width=700, height=670)
+        ttk.Notebook.__init__(self, master, width=700, height=600)
         self.pack()
         
     def addFrame(self, frame, fText):
