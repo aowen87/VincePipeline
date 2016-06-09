@@ -27,9 +27,9 @@ class Interface(Frame):
         """
         make text box active then disable after adding text.
         """    
-        text_box.configure(state='normal')
+        text_box.configure(state=NORMAL)
         text_box.insert(INSERT, string)
-        text_box.configure(state='disabled')
+        text_box.configure(state=DISABLED)
 
 
     def aciss_connect(self, command, username, pswd=None):
