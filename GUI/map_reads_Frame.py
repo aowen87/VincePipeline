@@ -69,7 +69,7 @@ class ChipInterface(Interface):
 		self._chip_directory = self._chip_directory_entry.get()
 		self._genome		 = self._genome_entry.get()
 		self._usrname		 = self._user_name_entry.get()
-		self._password 		 = self._password_entry
+		self._password 		 = self._password_entry.get()
 		vars = [self._usrname, self._genome, self._chip_directory]
 		
 		for var in vars:
@@ -78,8 +78,7 @@ class ChipInterface(Interface):
 					
 		if passed:			
 			
-			command = "(cd ChipReads/FinalTest; qsub -v chip_directory={},genome={} chip_pipe.pbs)".format(self._chip_directory, self._genome)
-			self.insert_text(command, self._message_text)
+			command = "(cd ChipReads/FinalTest; qsub -v chip_directory={},genome={} chip_pipe.pbs)".format(self._chip_directory, self._genome)=
 			
 			self.aciss_connect(command, self._usrname, self._password)
 		else:
