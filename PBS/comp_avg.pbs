@@ -9,3 +9,4 @@ module load methpipe
 cd /research/CIS454/vince/pipeline
 
 python3 methylome_comp.py ${meth_dir} ${diff_out} ${wt_meth} ${wt_hmr}
+python3 average_meth.py ${txt_directory} ${roi} ${linkage} ${window}

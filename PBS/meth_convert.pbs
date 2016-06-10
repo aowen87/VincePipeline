@@ -8,4 +8,4 @@ module load methpipe
 
 cd /research/CIS454/vince/pipeline
 
-python3 meth_convert.py ${input} ${output}
+python3 meth_convert.py ${brat_bw_dir} ${meth_output}

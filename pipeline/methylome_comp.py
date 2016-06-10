@@ -28,11 +28,12 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
 
     if wt_meth != None and wt_hmr != None:
         for i, j in zip(mut_meth, mut_hmr):
-            if wt_meth == i and wt_hmr == j:
-                continue
 
             s1 = wt_meth.split('/')[-1].split('_')[1]
             s2 = i.split('/')[-1].split('_')[1]
+
+            if s1 == s2:
+                continue
 
             print('finding differential methylation scores between {} and {}...'.format(s1, s2))
 
@@ -43,7 +44,7 @@ def diff_comp(input_dir, output_dir, wt_meth = None, wt_hmr = None):
             os.system("dmr {}/{}vs{}.methdiff {} {} {}/DMR_{}vs{}_lt_{} {}/DMR_{}vs{}_lt_{}".format(output_dir, s1,
                         s2, wt_hmr, j, output_dir, s1, s2, s1, output_dir, s1, s2, s2))
     else:
-        raise ValueError("please enter a")
+        raise ValueError("please enter a .meth and .hmr file!")
 
 def main():
     if len(sys.argv) > 5:

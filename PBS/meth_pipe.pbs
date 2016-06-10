@@ -8,4 +8,6 @@ module load methpipe
 
 cd /research/CIS454/vince/pipeline
 
+python3 meth_convert.py ${brat_bw_dir} ${meth_output}
 python3 methylome_comp.py ${meth_dir} ${diff_out} ${wt_meth} ${wt_hmr}
+python3 average_meth.py ${txt_directory} ${roi} ${linkage} ${window}

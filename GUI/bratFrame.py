@@ -4,7 +4,7 @@ __description__ = """The GUI for the launching and running bisulfiteMap.py
 and analyzing.py as a single pipeline. """
 
 from tkinter import *
-from tkinter import font
+from tkinter.ttk import *
 from paramiko import *
 from interface_class import Interface
 
@@ -19,65 +19,64 @@ class BratInterface(Interface):
         #fonts, colors, padding, etc. 
         ENTRY_W = 30
         PADX    = 2
-        PADY    = 9
-        bgColor = 'grey94'
-        cur_font     = font.Font(family="Courier New", size=13, weight="bold")
-        progress_box = Frame(self, relief=SUNKEN, background='white', borderwidth=5)
+        PADY    = 4
+        progress_box = Frame(self, relief=SUNKEN, borderwidth=5)
         scroll       = Scrollbar(progress_box)
         scroll.pack(side=RIGHT, fill=Y)
         self._message_txt = Text(progress_box, height=7)
-        self._message_txt.pack()
+        self._message_txt.config(state=DISABLED)
+        self._message_txt.pack(fill = X)
 
         #Labels and entries    
-        email_label              = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="Email: ")
-        self._email_entry        = Entry(self, bd=5, width=ENTRY_W)
-        usr_name_label           = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="ACISS user name: ")
-        self._usr_name_entry     = Entry(self, bd=5, width=ENTRY_W)
-        pswd_label               = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="ACISS password: ")
-        self._pswd_entry         = Entry(self, bd=5, show='*', width=ENTRY_W)
-        brat_dir_label           = Label(self, padx=PADX, pady=PADY, text="BRAT genome directory: ")
-        self._brat_dir_entry     = Entry(self, bd=5, width=ENTRY_W)
-        fastq_label              = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="fastq directory: ")
-        self._fastq_entry        = Entry(self, bd=5, width=ENTRY_W)
-        analyzed_res_label       = Label(self, padx=PADX, pady=PADY, bg=bgColor, text="results directory: ")
-        self._analyzed_res_entry = Entry(self, bd=5, width=ENTRY_W)
-        mistmatch_label          = Label(self, padx=2, pady=PADY, bg=bgColor, text="non-BS mismatches: ")
-        self._mismatch_entry     = Entry(self, bd=5, width=10)
+        email_label              = Label(self, text="Email: ")
+        self._email_entry        = Entry(self, width=ENTRY_W)
+        usr_name_label           = Label(self, text="ACISS user name: ")
+        self._usr_name_entry     = Entry(self, width=ENTRY_W)
+        pswd_label               = Label(self, text="ACISS password: ")
+        self._pswd_entry         = Entry(self, show='*', width=ENTRY_W)
+        brat_dir_label           = Label(self, text="BRAT genome directory: ")
+        self._brat_dir_entry     = Entry(self, width=ENTRY_W)
+        fastq_label              = Label(self, text="fastq directory: ")
+        self._fastq_entry        = Entry(self, width=ENTRY_W)
+        analyzed_res_label       = Label(self, text="results directory: ")
+        self._analyzed_res_entry = Entry(self, width=ENTRY_W)
+        mistmatch_label          = Label(self, text="non-BS mismatches: ")
+        self._mismatch_entry     = Entry(self, width=10)
         self._mismatch_entry.insert(END, '2')
-        quality_label            = Label(self, padx=2, pady=PADY, bg=bgColor, text="quality score: ")
-        self._quality_entry      = Entry(self, width=10, bd=5)
+        quality_label            = Label(self, text="quality score: ")
+        self._quality_entry      = Entry(self, width=10)
         self._quality_entry.insert(END, '20')
         self._build_check_var    = IntVar()
         build_check              = Checkbutton(self, text="build genome", variable=self._build_check_var,
-                                              onvalue=1, offvalue=0,bg=bgColor, height=5, width=20)
+                                              onvalue=1, offvalue=0)
         self._clean_check_var    = IntVar()
         self._clean_check_var.set(1)
         clean_check              = Checkbutton(self, text="remove extra output", variable=self._clean_check_var,
-                                              onvalue=1, offvalue=0, bg=bgColor, height=5, width=20)
-        start                    = Button(self, text='RUN PIPELINE', font=cur_font, command=self.run_pipeline)
+                                              onvalue=1, offvalue=0)
+        start                    = Button(self, text='RUN PIPELINE', command=self.run_pipeline)
         self._email_entry.focus_set()
        
         #GUI structure
-        email_label.grid(row=0, column=0, sticky=W, padx=PADX+30)
-        self._email_entry.grid(row=0, column=1, sticky=W, padx=PADX+30)
-        usr_name_label.grid(row=1, column=0, sticky=W, padx=PADX+30)
-        self._usr_name_entry.grid(row=1, column=1, sticky=W, padx=PADX+30)
-        pswd_label.grid(row=2, column=0, stick=W, padx=PADX+30)
-        self._pswd_entry.grid(row=2, column=1, sticky=W, padx=PADX+30)
-        brat_dir_label.grid(row=3, column=0, sticky=W, padx=PADX+30)
-        self._brat_dir_entry.grid(row=3, column=1, sticky=W, padx=PADX+30)
-        fastq_label.grid(row=4, column=0, sticky=W, padx=PADX+30)
-        self._fastq_entry.grid(row=4, column=1, sticky=W, padx=PADX+30)
-        analyzed_res_label.grid(row=5, column=0, sticky=W, padx=PADX+30)
-        self._analyzed_res_entry.grid(row=5, column=1, sticky=W, padx=PADX+30)
-        mistmatch_label.grid(row=6, column=0, sticky=W, padx=PADX+30)
-        self._mismatch_entry.grid(row=6, column=1, sticky=W, padx=PADX+30)
-        quality_label.grid(row=7, column=0, sticky=W, padx=PADX+30)
-        self._quality_entry.grid(row=7, column=1, sticky=W, padx=PADX+30)
+        email_label.grid(row=0, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._email_entry.grid(row=0, column=1, sticky=W, padx=PADX, pady=PADY)
+        usr_name_label.grid(row=1, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._usr_name_entry.grid(row=1, column=1, sticky=W, padx=PADX, pady=PADY)
+        pswd_label.grid(row=2, column=0, stick=W, padx=PADX, pady=PADY)
+        self._pswd_entry.grid(row=2, column=1, sticky=W, padx=PADX, pady=PADY)
+        brat_dir_label.grid(row=3, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._brat_dir_entry.grid(row=3, column=1, sticky=W, padx=PADX, pady=PADY)
+        fastq_label.grid(row=4, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._fastq_entry.grid(row=4, column=1, sticky=W, padx=PADX, pady=PADY)
+        analyzed_res_label.grid(row=5, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._analyzed_res_entry.grid(row=5, column=1, sticky=W, padx=PADX, pady=PADY)
+        mistmatch_label.grid(row=6, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._mismatch_entry.grid(row=6, column=1, sticky=W, padx=PADX, pady=PADY)
+        quality_label.grid(row=7, column=0, sticky=W, padx=PADX, pady=PADY)
+        self._quality_entry.grid(row=7, column=1, sticky=W, padx=PADX, pady=PADY)
         build_check.grid(row=8, column=0, sticky=W)
         clean_check.grid(row=8, column=1)
-        progress_box.grid(row=9, column=0, sticky=N+E+S+W, padx=PADX+5, pady=PADY,columnspan=2)
-        start.grid(row=10, column=1, sticky=E, pady=PADY, padx=50)
+        progress_box.grid(row=9, column=0, sticky=N+E+S+W, padx=PADX, pady=PADY,columnspan=2)
+        start.grid(row=10, column=1, sticky=E, pady=PADY, padx=PADX)
     
     
     def run_pipeline(self):
@@ -112,8 +111,6 @@ class BratInterface(Interface):
                 passed = False
                                
         if passed:
-            #The ACISS path is below between 'cd' and ';'. If you wish
-            #to alter the path, change this section of the string. 
             command = ("(cd /research/CIS454/vince/pipeline; qsub -M {} -v brat={},fastq={},"
             "build={},mismatch={},score={},res={},clean={},map='mapResults' bratPipe.pbs)".format(email, 
             BRAT_genome_dir, fastq_dir, build_genome, mismatches, quality_score, 
@@ -121,7 +118,7 @@ class BratInterface(Interface):
      
             self.aciss_connect(command, usrname, pswrd)
         else:
-            self._message_txt.insert(INSERT, "All entry windows must be filled (excluding email and password)\n") 
+            self.insert_text("All entry windows must be filled (excluding email and password)\n", self._message_txt)
        
        
  
