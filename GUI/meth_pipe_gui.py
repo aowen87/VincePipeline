@@ -182,7 +182,7 @@ class MethInterface(Interface):
 		email =				self._email.get()
 
 		passed = True
-		command = '(cd /research/CIS454/vince/pipeline; qsub -M {} -v '.format(email)
+		command = '(cd BuildPipe; qsub -M {} -v '.format(email)
 		vars = [email, username]
 		keys = []
 

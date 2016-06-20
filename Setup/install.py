@@ -2,11 +2,12 @@ import sys
 from linuxInstall import *
 
 
-def install(usrname, pswd, ACISS_path, local_path):
-    cur_os = sys.platform
-    if cur_os.lower[:5] == 'linux' or cur_os.lower[:6] == 'darwin':
-        linuxInstall(usrname, pswd, ACISS_path, local_path)    
-    elif cur_os.lower[:5] == 'win32' or cur_ow.lower[:6] == 'cygwin':
+def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
+    cur_os = str(sys.platform).lower()
+    print(cur_os)
+    if cur_os[:5] == 'linux' or cur_os[:6] == 'darwin':
+        linuxInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)    
+    elif cur_os[:5] == 'win32' or cur_ow[:6] == 'cygwin':
         pass
     else:
         print("ERROR: unsuported operating system")
@@ -14,5 +15,22 @@ def install(usrname, pswd, ACISS_path, local_path):
         sys.exit()
 
 
-if __name__ == "__main__":
     
+if __name__ == "__main__":
+    '''
+    '''
+    parser = argparse.ArgumentParser("Setup for Vince's pipeline")
+    parser.add_argument('usrname', type=str)
+    parser.add_argument('pswd', type=str, default='')
+    parser.add_argument('ACISS_path', type=str)
+    parser.add_argument('shortcut_path', type=str)
+    parser.add_argument('genome_path', type=str)
+    args = parser.parse_args()
+    usrname = args.usrname
+    pswd = args.pswd 
+    ACISS_path = args.ACISS_path
+    shortcut_path = args.shortcut_path
+    genome_path = args.genome_path
+    install(usrname, pswd, ACISS_path, shortcut_path, genome_path)
+
+

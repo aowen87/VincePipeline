@@ -17,9 +17,9 @@ def addPath(ACISS_path):
 def createShortcut(sink_path):
     '''
     '''
-    if sink_path[-1] == '/':
+    if sink_path[-1] == '\\':
         sink_path = sink_path[:-1]
-    sink_path = sink_path + '\Main.pyw'
+    sink_path = sink_path + '\\Main.pyw'
     if os.path.exists(sink_path):
         print("ERROR: {} already exists...".format(sink_path))
         sys.exit()    
@@ -32,9 +32,9 @@ def createShortcut(sink_path):
         print("Make sure you have python3.x installed")
         sys.exit()
     
-    src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
+    src_path = os.path.dirname(os.getcwd()) + '\\GUI\\Main.pyw'
     os.system('chmod +x {}'.format(src_path))
-    os.system("sed -i -e '1i#! {}\' {}".format(pypath, src_path))
+    os.system("sed -i -e '1i#! {}\\' {}".format(pypath, src_path))
     os.symlink(src_path, '{}'.format(sink_path))
      
 
@@ -54,9 +54,9 @@ def buildACISSRepo(usrname, pswd, ACISS_path):
         except IOError:
             sftp.mkdir(ACISS_path)
             sftp.chdir(ACISS_path)
-        dirTransfer(sftp, '../pipe', './')
-        dirTransfer(sftp, '../PBS', './')
-        dirTransfer(sftp, './', './', ['setup.py'])
+        dirTransfer(sftp, '..\\pipeline', '.\\')
+        dirTransfer(sftp, '..\\PBS', '.\\')
+        dirTransfer(sftp, '.\\', '.\\', ['setup.py'])
         sftp.close()
     except Exception as e:
         print("UNABLE TO CONNECT TO ACISS: ", e)
@@ -70,9 +70,9 @@ def buildACISSRepo(usrname, pswd, ACISS_path):
 def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
     '''
     '''
-    if src_dir[-1] == '/':
+    if src_dir[-1] == '\\':
         src_dir = src_dir[:-1]
-    if sink_dir[-1] == '/':
+    if sink_dir[-1] == '\\':
         sink_dir = sink_dir[:-1]
     
     for root, dirs, files in os.walk(src_dir):
@@ -89,7 +89,7 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
         else:
             for f in files:
                 src_path  = os.path.join(root, f)
-                sink_path  = src_path.replace(src_dir, sink_dir) 
+                sink_path = src_path.replace(src_dir, sink_dir) 
                 trans_sftp.put(src_path, sink_path)
 
 
@@ -113,6 +113,5 @@ if __name__ == "__main__":
     #createShortcut('/home/alister')
     #addPath("{/my/new/path/}")
     #install(usrname, pswd, "MyInstall", None)
-    createShortcut('/home/alister/Desktop')
 
 

@@ -36,7 +36,7 @@ def createShortcut(sink_path):
      
 
 
-def buildACISSRepo(usrname, pswd, ACISS_path):
+def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
     '''
     '''
     try:
@@ -53,11 +53,33 @@ def buildACISSRepo(usrname, pswd, ACISS_path):
         dirTransfer(sftp, '../pipeline', './')
         dirTransfer(sftp, '../PBS', './')
         dirTransfer(sftp, './', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py'])
+        genomeTransfer(sftp, genome_path, './')
         sftp.close()
     except Exception as e:
         print("UNABLE TO CONNECT TO ACISS: ", e)
     sftp.close()
     transport.close()
+
+
+def genomeTransfer(trans_sftp, genome_path, sink_dir):
+    '''
+    '''
+    if genome_path[-1] == '/':
+        genome_path = genome_path[:-1]
+    if sink_dir[-1] == '/':
+        sink_dir = sink_dir[:-1]
+    genome_dir = genome_path.split('/')[-1] 
+    sink_dir   = sink_dir + '/' + genome_dir 
+    trans_sftp.mkdir(sink_dir)
+    for root, dirs, files in os.walk(genome_path):
+        for dr in dirs:                             
+            dir_path  = os.path.join(root, dr)
+            sink_path = dir_path.replace(genome_path, sink_dir) 
+            trans_sftp.mkdir(sink_path)
+        for f in files:
+            file_path = os.path.join(root, f)
+            sink_path = file_path.replace(genome_path, sink_dir) 
+            trans_sftp.put(file_path, sink_path)
 
 
 
@@ -72,28 +94,28 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
     
     for root, dirs, files in os.walk(src_dir):
         for dr in dirs:
-            src_path  = os.path.join(root, dr)
-            sink_path  = src_path.replace(src_dir, sink_dir) 
+            src_path  = os.path.join(root, dr)  
+            sink_path = src_path.replace(src_dir, sink_dir) 
             trans_sftp.mkdir(sink_path)
         if file_excludes:
             for f in files:
                 if f not in file_excludes:
                     src_path  = os.path.join(root, f)
-                    sink_path  = src_path.replace(src_dir, sink_dir) 
+                    sink_path = src_path.replace(src_dir, sink_dir) 
                     trans_sftp.put(src_path, sink_path)
         else:
             for f in files:
                 src_path  = os.path.join(root, f)
-                sink_path  = src_path.replace(src_dir, sink_dir) 
+                sink_path = src_path.replace(src_dir, sink_dir) 
                 trans_sftp.put(src_path, sink_path)
 
 
-def linuxInstall(usrname, pswd, ACISS_path, local_path):
+def linuxInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     '''
     '''
     addPath(ACISS_path)
-    buildACISSRepo(usrname, pswd, ACISS_path)
-    createShortcut(local_path)
+    buildACISSRepo(usrname, pswd, ACISS_path, genome_path)
+    createShortcut(shortcut_path)
 
 if __name__ == "__main__":
     '''
@@ -104,6 +126,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    linuxInstall(usrname, pswd, 'MyPipeline', '/home/alister/Desktop')
+    linuxInstall(usrname, pswd, 'PipeBuild', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/Nc12_genome_BRATBW')
 
 
