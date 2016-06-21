@@ -66,13 +66,20 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="run BRAT-BW to map bisulfite-seq reads")
     parser.add_argument('BRAT_genome', type=str, help='a BRAT-BW genome directory')
     parser.add_argument('fastq_dir', type=str, help='a directory containing fastq files of bisulfite-seq reads')
-    parser.add_argument('build', type=bool, help='Do you need to build a genome? True/False')
+    parser.add_argument('build', type=str, help='Do you need to build a genome? True/False')
     parser.add_argument('non_BS_mismatches', type=int, nargs='?', default=2, help="""specify the number of non-BS mismatches. default=2""")
     parser.add_argument('quality_score', type=int, nargs='?', default=20, help='quality score. default=20')
     args = parser.parse_args()
     genome = args.BRAT_genome
     fastFiles = args.fastq_dir
     build = args.build
+    if build == 'False':
+        build = False
+    else if build == 'True':
+        build = True
+    else:
+        print("ERROR: Invalid build value")
+        sys.exit() 
     m = args.non_BS_mismatches
     qs = args.quality_score
     bisulfiteMap(genome, fastFiles, build, m, qs)
