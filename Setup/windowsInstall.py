@@ -13,7 +13,7 @@ def addPath(ACISS_path):
     os.system("(Get-Content ../PBS/*) | ForEach-Object {{ $_ -replace '_PATH_INSERT_', '{}' }} | Set-Content ./*".format(ACISS_path))
     os.system("(Get-Content ../GUI/*) | ForEach-Object {{ $_ -replace '_PATH_INSERT_', '{}' }} | Set-Content ./*".format(ACISS_path))
    
-#FIXME: change for win32 
+#TODO: Test this on windows
 def createShortcut(sink_path):
     '''
     '''
@@ -39,8 +39,8 @@ def createShortcut(sink_path):
      
 
 
-#FIXME: change for win32 
-def buildACISSRepo(usrname, pswd, ACISS_path):
+#TODO: Test on windows
+def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
     '''
     '''
     try:
@@ -54,9 +54,10 @@ def buildACISSRepo(usrname, pswd, ACISS_path):
         except IOError:
             sftp.mkdir(ACISS_path)
             sftp.chdir(ACISS_path)
-        dirTransfer(sftp, '..\\pipeline', '.\\')
-        dirTransfer(sftp, '..\\PBS', '.\\')
-        dirTransfer(sftp, '.\\', '.\\', ['setup.py'])
+        dirTransfer(sftp, '..\\pipeline', './')
+        dirTransfer(sftp, '..\\PBS', './')
+        dirTransfer(sftp, '.\\', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py'])
+        genomeTransfer(sftp, genome_path, './')
         sftp.close()
     except Exception as e:
         print("UNABLE TO CONNECT TO ACISS: ", e)
@@ -66,7 +67,7 @@ def buildACISSRepo(usrname, pswd, ACISS_path):
 
 
 
-#FIXME: change for win32 
+#TODO: Test on windows
 def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
     '''
     '''
@@ -92,26 +93,46 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
                 sink_path = src_path.replace(src_dir, sink_dir) 
                 trans_sftp.put(src_path, sink_path)
 
+#TODO: test for win32
+def genomeTransfer(trans_sftp, genome_path, sink_dir):
+    '''
+    '''
+    if genome_path[-1] == '\\':
+        genome_path = genome_path[:-1]
+    if sink_dir[-1] == '\\':
+        sink_dir = sink_dir[:-1]
+    genome_dir = genome_path.split('\\')[-1] 
+    sink_dir   = sink_dir + '\\' + genome_dir 
+    trans_sftp.mkdir(sink_dir)
+    for root, dirs, files in os.walk(genome_path):
+        for dr in dirs:                             
+            dir_path  = os.path.join(root, dr)
+            sink_path = dir_path.replace(genome_path, sink_dir) 
+            trans_sftp.mkdir(sink_path)
+        for f in files:
+            file_path = os.path.join(root, f)
+            sink_path = file_path.replace(genome_path, sink_dir) 
+            trans_sftp.put(file_path, sink_path)
 
-def windowsInstall(usrname, pswd, ACISS_path, local_path):
+
+
+
+def windowsInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     '''
     '''
     addPath(ACISS_path)
-    buildACISSRepo(usrname, pswd, ACISS_path)
+    buildACISSRepo(usrname, pswd, ACISS_path, genome_path)
     #createShortcut(local_path)
 
 if __name__ == "__main__":
     '''
     '''
     parser = argparse.ArgumentParser("Setup for Vince's pipeline")
-    #parser.add_argument('usrname', type=str)
-    #parser.add_argument('pswd', type=str, default='')
-    #args = parser.parse_args()
-    #usrname = args.usrname
-    #pswd = args.pswd 
-    #buildACISSRepo(usrname, , 'myPipe')
-    #createShortcut('/home/alister')
-    #addPath("{/my/new/path/}")
-    #install(usrname, pswd, "MyInstall", None)
+    parser.add_argument('usrname', type=str)
+    parser.add_argument('pswd', type=str, default='')
+    args = parser.parse_args()
+    usrname = args.usrname
+    pswd = args.pswd 
+    install(usrname, pswd, "Win32Install", 'C:\\Users\\alister\\Desktop', 'C:\\Users\\alister\\Dropbox\\BioInf\\research\\Nc12_genome_BRATBW')
 
 
