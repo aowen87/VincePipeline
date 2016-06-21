@@ -75,7 +75,7 @@ if __name__ == "__main__":
     build = args.build
     if build == 'False':
         build = False
-    else if build == 'True':
+    elif build == 'True':
         build = True
     else:
         print("ERROR: Invalid build value")
