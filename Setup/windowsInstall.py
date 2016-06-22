@@ -3,6 +3,7 @@ import argparse
 import os
 import sys
 import subprocess
+import fileinput 
 
 
 
@@ -10,8 +11,14 @@ import subprocess
 def addPath(ACISS_path):
     '''
     '''
-    os.system("(Get-Content ../PBS/*) | ForEach-Object {{ $_ -replace '_PATH_INSERT_', '{}' }} | Set-Content ./*".format(ACISS_path))
-    os.system("(Get-Content ../GUI/*) | ForEach-Object {{ $_ -replace '_PATH_INSERT_', '{}' }} | Set-Content ./*".format(ACISS_path))
+    path_dirs = ['..\\PBS', '..\\GUI']
+    for path_dir in path_dirs:
+        for root, dirs, files in os.walk(path_dir):
+            for f in files:
+                file_path = os.path.join(root, f)
+                with fileinput.FileInput(file_path, inplace=True) as file:
+                    for line in file:
+                        print(line.replace('_PATH_INSERT_', ACISS_path), end='') 
    
 #TODO: Test this on windows
 def createShortcut(sink_path):
@@ -135,6 +142,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    install(usrname, pswd, "Win32Install", 'C:\\Users\\alister\\Desktop', 'C:\\Users\\alister\\Dropbox\\BioInf\\research\\Nc12_genome_BRATBW')
+    windowsInstall(usrname, pswd, "Win32Install", 'C:\\Users\\alister\\Desktop', 'C:\\Users\\alister\\Dropbox\\BioInf\\research\\Nc12_genome_BRATBW')
 
 

@@ -182,7 +182,7 @@ class MethInterface(Interface):
 		email =				self._email.get()
 
 		passed = True
-		command = '(cd mapCheck; qsub -M {} -v '.format(email)
+		command = '(cd _PATH_INSERT_; qsub -M {} -v '.format(email)
 		vars = [email, username]
 		keys = []
 
@@ -214,9 +214,10 @@ class MethInterface(Interface):
 				keys.append(j)
 
 		command += pbs_files[tuple(keys)] + ')'
-		for var in vars:
-			if var == '':
-				passed = False
+		print(command)
+		# for var in vars:
+		# 	if var == '':
+		# 		passed = False
 
 		if passed:
 			self.aciss_connect(command, username, password)

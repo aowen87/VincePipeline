@@ -8,7 +8,7 @@ def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
     if cur_os[:5] == 'linux' or cur_os[:6] == 'darwin':
         linuxInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)    
     elif cur_os[:5] == 'win32' or cur_ow[:6] == 'cygwin':
-        pass
+        windowsInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)
     else:
         print("ERROR: unsuported operating system")
         print("Check documentation for manual installation")

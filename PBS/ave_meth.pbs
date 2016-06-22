@@ -3,7 +3,7 @@
 #PBS -l nodes=1:ppn=4
 #PBS -m abe
 
-cd mapCheck
+cd _PATH_INSERT_
 
 module load python/3.3.4
 module load methpipe

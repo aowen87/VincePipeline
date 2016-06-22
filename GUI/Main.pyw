@@ -1,6 +1,4 @@
 #! /home/alister/anaconda3/bin/python3
-#! /home/alister/anaconda3/bin/python3
-#! /home/alister/anaconda3/bin/python3
 __author__ = 'Alister Maguire'
 __date__ = '05/31/2016'
 __description__ = "Main class to launch a pipeline notebook."
