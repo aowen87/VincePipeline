@@ -66,11 +66,11 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         dirTransfer(sftp, './', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py'])
         genomeTransfer(sftp, genome_path, './')
         sftp.mkdir('mapChip')
-        sftp.(ACISS_path + '/chip_map_reads.py', ACISS_path + '/mapChip/chip_map_reads.py')
-        sftp.(ACISS_path + '/chip_pipe.pbs', ACISS_path + '/mapChip/chip_pipe.pbs')
+        sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
+        sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
         sftp.close()
     except Exception as e:
-        print("UNABLE TO CONNECT TO ACISS: ", e)
+        print("ERROR BUILDING REPO: ", e)
     sftp.close()
     transport.close()
 
@@ -161,6 +161,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    linuxInstall(usrname, pswd, 'PipeBuild', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/Nc12_genome_BRATBW')
+    linuxInstall(usrname, pswd, 'mapCheck', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
 
 

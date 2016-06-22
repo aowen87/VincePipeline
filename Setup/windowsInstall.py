@@ -58,8 +58,8 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         dirTransfer(sftp, '..\\PBS', './')
         dirTransfer(sftp, '.\\', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py'])
         genomeTransfer(sftp, genome_path, './')
-        sftp.(ACISS_path + '/chip_map_reads.py', ACISS_path + '/mapChip/chip_map_reads.py')
-        sftp.(ACISS_path + '/chip_pipe.pbs', ACISS_path + '/mapChip/chip_pipe.pbs')
+        sftp.rename(ACISS_path + '/chip_map_reads.py', ACISS_path + '/mapChip/chip_map_reads.py')
+        sftp.rename(ACISS_path + '/chip_pipe.pbs', ACISS_path + '/mapChip/chip_pipe.pbs')
         sftp.close()
     except Exception as e:
         print("UNABLE TO CONNECT TO ACISS: ", e)
