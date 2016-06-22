@@ -6,6 +6,9 @@ import subprocess
 
 def addPath(ACISS_path):
     '''
+       Insert the aciss path into all appropriate files.
+       param: ACISS_path -> a destination path on ACISS. 
+       
     '''
     os.system("cd ../PBS; find . -type f -exec sed -i 's@_PATH_INSERT_@{}@g' {{}} +".format(ACISS_path))
     os.system("cd ../GUI; find . -type f -exec sed -i 's@_PATH_INSERT_@{}@g' {{}} +".format(ACISS_path))
@@ -13,6 +16,8 @@ def addPath(ACISS_path):
  
 def createShortcut(sink_path):
     '''
+       Create a shortcut to Main.pyw within the given destination path.
+       param: sink_path -> the path to create a shortcut in. 
     '''
     if sink_path[-1] == '/':
         sink_path = sink_path[:-1]
@@ -35,9 +40,15 @@ def createShortcut(sink_path):
     os.symlink(src_path, '{}'.format(sink_path))
      
 
-
 def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
     '''
+       Build a repository on ACISS where all computations can take place. 
+       param:
+             usrname: ACISS user name.
+             pswd: ACISS password.
+             ACISS_path: The destination path located on ACISS.
+             genome_path: The local path to a genome that will be
+             uploaded into the repository. 
     '''
     try:
         host = "aciss.uoregon.edu"
@@ -54,6 +65,9 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         dirTransfer(sftp, '../PBS', './')
         dirTransfer(sftp, './', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py'])
         genomeTransfer(sftp, genome_path, './')
+        sftp.mkdir('mapChip')
+        sftp.(ACISS_path + '/chip_map_reads.py', ACISS_path + '/mapChip/chip_map_reads.py')
+        sftp.(ACISS_path + '/chip_pipe.pbs', ACISS_path + '/mapChip/chip_pipe.pbs')
         sftp.close()
     except Exception as e:
         print("UNABLE TO CONNECT TO ACISS: ", e)
@@ -63,6 +77,12 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
 
 def genomeTransfer(trans_sftp, genome_path, sink_dir):
     '''
+        Transfer a local genome to ACISS. 
+        param:
+              trans_sftp: A paramiko sftp client.
+              genome_path: Local path to a genome.
+              sink_dir: The ACISS directory/ path 
+              for installation. 
     '''
     if genome_path[-1] == '/':
         genome_path = genome_path[:-1]
@@ -82,10 +102,15 @@ def genomeTransfer(trans_sftp, genome_path, sink_dir):
             trans_sftp.put(file_path, sink_path)
 
 
-
-
 def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
     '''
+       Transfer a directory and all of it's contents to ACISS.
+       param: 
+             trans_sftp: A paramiko sftp client.
+             src_dir: The local target path/directory.
+             sink_dir: The ACISS target path/directory.
+             file_excludes: A list of files that shouldn't be 
+             transfered to ACISS. 
     '''
     if src_dir[-1] == '/':
         src_dir = src_dir[:-1]
@@ -112,6 +137,16 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
 
 def linuxInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     '''
+       Auto-Install install the pipeline. 
+       param:
+             usrname: ACISS user name.
+             pswd: ACISS password.
+             ACISS_path: Target path/directory for installation
+             on ACISS. 
+             shorcut_path: Target path/directory for local 
+             shortcut. 
+             genome_path: Local path/directory containing the
+             genome to be transfered to ACISS. 
     '''
     addPath(ACISS_path)
     buildACISSRepo(usrname, pswd, ACISS_path, genome_path)

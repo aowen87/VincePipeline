@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+#PBS -q generic
+#PBS -m abe
+#PBS -M pwj@uoregon.edu
+-mail address
+
+cd /research/CIS454/vince/pipeline/mapChip
+
+module load python/3.3.4
+module load bowtie
+module load samtools
+
+
+python3 chip_map_reads.py ${chip_directory} ${genome} ${output_directory}
