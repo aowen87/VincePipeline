@@ -80,7 +80,7 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
             sftp.chdir(ACISS_path)
         dirTransfer(sftp, '../pipeline', './')
         dirTransfer(sftp, '../PBS', './')
-        dirTransfer(sftp, './', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py', 'macInstall.py'])
+        dirTransfer(sftp, './', './', ['install.py', 'windowsInstall.py', 'unixInstall.py'])
         genomeTransfer(sftp, genome_path, './')
         sftp.mkdir('mapChip')
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
@@ -152,7 +152,7 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
                 trans_sftp.put(src_path, sink_path)
 
 
-def macInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
+def unixInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     '''
        Auto-Install install the pipeline. 
        param:
@@ -178,6 +178,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    macInstall(usrname, pswd, 'NewPipe', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
+    unixInstall(usrname, pswd, 'NewPipe', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
 
 

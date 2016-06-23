@@ -1,6 +1,6 @@
 import sys
-from linuxInstall import *
-
+from unixInstall import *
+from windowsInstall import *
 
 def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
     cur_os = str(sys.platform).lower()
