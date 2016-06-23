@@ -6,8 +6,6 @@ import subprocess
 import fileinput 
 
 
-
-
 def addPath(ACISS_path):
     '''
     '''
@@ -20,7 +18,7 @@ def addPath(ACISS_path):
                     for line in file:
                         print(line.replace('_PATH_INSERT_', ACISS_path), end='') 
    
-#TODO: Test this on windows
+#TODO: fix for win32
 def createShortcut(sink_path):
     '''
     '''
@@ -41,12 +39,10 @@ def createShortcut(sink_path):
     
     src_path = os.path.dirname(os.getcwd()) + '\\GUI\\Main.pyw'
     os.system('chmod +x {}'.format(src_path))
-    os.system("sed -i -e '1i#! {}\\' {}".format(pypath, src_path))
+    os.system("sed -i -e '1i#!{}\\' {}".format(pypath, src_path))
     os.symlink(src_path, '{}'.format(sink_path))
      
 
-
-#TODO: Test on windows
 def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
     '''
     '''
@@ -65,26 +61,19 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         dirTransfer(sftp, '..\\PBS', './')
         dirTransfer(sftp, '.\\', './', ['install.py', 'windowsInstall.py', 'unixInstall.py'])
         genomeTransfer(sftp, genome_path, './')
-        sftp.rename(ACISS_path + '/chip_map_reads.py', ACISS_path + '/mapChip/chip_map_reads.py')
-        sftp.rename(ACISS_path + '/chip_pipe.pbs', ACISS_path + '/mapChip/chip_pipe.pbs')
+        sftp.mkdir('mapChip')
+        sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
+        sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
         sftp.close()
     except Exception as e:
-        print("UNABLE TO CONNECT TO ACISS: ", e)
+        print("ERROR BUILDING REPO: ", e)
     sftp.close()
     transport.close()
 
 
-
-
-#TODO: Test on windows
 def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
     '''
     '''
-    if src_dir[-1] == '\\':
-        src_dir = src_dir[:-1]
-    if sink_dir[-1] == '\\':
-        sink_dir = sink_dir[:-1]
-    
     for root, dirs, files in os.walk(src_dir):
         for dr in dirs:
             src_path  = os.path.join(root, dr)
@@ -94,36 +83,34 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
             for f in files:
                 if f not in file_excludes:
                     src_path  = os.path.join(root, f)
-                    sink_path  = src_path.replace(src_dir, sink_dir) 
+                    sink_path = src_path.replace(src_dir, sink_dir) 
+                    sink_path = sink_path.replace('\\', '/')
                     trans_sftp.put(src_path, sink_path)
         else:
             for f in files:
                 src_path  = os.path.join(root, f)
                 sink_path = src_path.replace(src_dir, sink_dir) 
+                sink_path = sink_path.replace('\\', '/')
                 trans_sftp.put(src_path, sink_path)
 
-#TODO: test for win32
+
 def genomeTransfer(trans_sftp, genome_path, sink_dir):
     '''
     '''
-    if genome_path[-1] == '\\':
-        genome_path = genome_path[:-1]
-    if sink_dir[-1] == '\\':
-        sink_dir = sink_dir[:-1]
     genome_dir = genome_path.split('\\')[-1] 
-    sink_dir   = sink_dir + '\\' + genome_dir 
+    sink_dir   = sink_dir + genome_dir 
     trans_sftp.mkdir(sink_dir)
     for root, dirs, files in os.walk(genome_path):
         for dr in dirs:                             
             dir_path  = os.path.join(root, dr)
             sink_path = dir_path.replace(genome_path, sink_dir) 
+            sink_path = sink_path.replace('\\', '/')
             trans_sftp.mkdir(sink_path)
         for f in files:
             file_path = os.path.join(root, f)
             sink_path = file_path.replace(genome_path, sink_dir) 
+            sink_path = sink_path.replace('\\', '/')
             trans_sftp.put(file_path, sink_path)
-
-
 
 
 def windowsInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
@@ -142,6 +129,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    windowsInstall(usrname, pswd, "Win32Install", 'C:\\Users\\alister\\Desktop', 'C:\\Users\\alister\\Dropbox\\BioInf\\research\\Nc12_genome_BRATBW')
+    windowsInstall(usrname, pswd, "Win32Install", 'C:\\Users\\alister\\Desktop', 'C:\\Users\\alister\\Dropbox\\BioInf\\research\\fakeGenome')
 
 
