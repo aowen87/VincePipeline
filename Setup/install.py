@@ -4,9 +4,8 @@ from linuxInstall import *
 
 def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
     cur_os = str(sys.platform).lower()
-    print(cur_os)
     if cur_os[:5] == 'linux' or cur_os[:6] == 'darwin':
-        linuxInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)    
+        unixInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)    
     elif cur_os[:5] == 'win32' or cur_ow[:6] == 'cygwin':
         windowsInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)
     else:

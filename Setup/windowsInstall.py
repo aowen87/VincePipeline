@@ -63,7 +63,7 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
             sftp.chdir(ACISS_path)
         dirTransfer(sftp, '..\\pipeline', './')
         dirTransfer(sftp, '..\\PBS', './')
-        dirTransfer(sftp, '.\\', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py'])
+        dirTransfer(sftp, '.\\', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py', 'macInstal.py'])
         genomeTransfer(sftp, genome_path, './')
         sftp.rename(ACISS_path + '/chip_map_reads.py', ACISS_path + '/mapChip/chip_map_reads.py')
         sftp.rename(ACISS_path + '/chip_pipe.pbs', ACISS_path + '/mapChip/chip_pipe.pbs')

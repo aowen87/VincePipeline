@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import fileinput
+import io
 
 def addPath(ACISS_path):
     '''
@@ -11,8 +12,6 @@ def addPath(ACISS_path):
        param: ACISS_path -> a destination path on ACISS. 
        
     '''
-    #os.system("cd ../PBS; find . -type f -exec sed -i 's@_PATH_INSERT_@{}@g' {{}} +".format(ACISS_path))
-    #os.system("cd ../GUI; find . -type f -exec sed -i 's@_PATH_INSERT_@{}@g' {{}} +".format(ACISS_path))
     path_dirs = ['../PBS', '../GUI']
     for path_dir in path_dirs:
         for root, dirs, files in os.walk(path_dir):
@@ -30,7 +29,7 @@ def createShortcut(sink_path):
     '''
     if sink_path[-1] == '/':
         sink_path = sink_path[:-1]
-    sink_path = sink_path + '/pipeline.pyw'
+    sink_path = sink_path + '/pipeline'
     if os.path.exists(sink_path):
         print("ERROR: {} already exists...".format(sink_path))
         sys.exit()    
@@ -45,8 +44,17 @@ def createShortcut(sink_path):
     
     src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
     os.system('chmod +x {}'.format(src_path))
-    os.system("sed -i -e '1i#! {}\' {}".format(pypath, src_path))
+    os.system("sed -i -e '1i#!{}\' {}".format(pypath, src_path))
     os.symlink(src_path, '{}'.format(sink_path))
+    
+    #src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
+    #text = "#!/bin/bash\npython3 {}".format(src_path)
+    #with io.FileIO(sink_path, 'w') as file:
+        #file.write(text)
+    #exe_file = open(sink_path, 'w')
+    #exe_file.write(text)
+    #exe_file.close()
+    #os.system("chmod 755 {}".format(sink_path))
      
 
 def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
@@ -72,7 +80,7 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
             sftp.chdir(ACISS_path)
         dirTransfer(sftp, '../pipeline', './')
         dirTransfer(sftp, '../PBS', './')
-        dirTransfer(sftp, './', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py','macInstal.py'])
+        dirTransfer(sftp, './', './', ['install.py', 'linuxInstall.py', 'windowsInstall.py', 'macInstall.py'])
         genomeTransfer(sftp, genome_path, './')
         sftp.mkdir('mapChip')
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
@@ -144,7 +152,7 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
                 trans_sftp.put(src_path, sink_path)
 
 
-def linuxInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
+def macInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     '''
        Auto-Install install the pipeline. 
        param:
@@ -170,6 +178,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    linuxInstall(usrname, pswd, 'NewPipe', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
+    macInstall(usrname, pswd, 'NewPipe', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
 
 
