@@ -41,10 +41,15 @@ def createShortcut(sink_path):
         print("ERROR: unable to find python3 path...")
         print("Make sure you have python3.x installed")
         sys.exit()
-    
+        
+    pypath = '#!' + pypath
     src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
     os.system('chmod +x {}'.format(src_path))
-    os.system("sed -i -e '1i#!{}\' {}".format(pypath, src_path))
+    with open(src_path, 'r+') as f:
+        content = f.read()
+        f.seek(0, 0)
+        f.write(pypath.rstrip('\r\n') + '\n' + content)
+    #os.system("sed -i -e '1i#!{}\' {}".format(pypath, src_path))
     os.symlink(src_path, '{}'.format(sink_path))
     
     #src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
@@ -178,6 +183,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    unixInstall(usrname, pswd, 'NewPipe', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
+    unixInstall(usrname, pswd, 'UnixInstall', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
 
 
