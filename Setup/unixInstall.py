@@ -176,6 +176,7 @@ def unixInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
 
 if __name__ == "__main__":
     '''
+       Used for testing from the command line.
     '''
     parser = argparse.ArgumentParser("Setup for Vince's pipeline")
     parser.add_argument('usrname', type=str)
