@@ -1,9 +1,13 @@
-from paramiko import *
 import argparse
 import os
 import sys
 import subprocess
 import fileinput 
+try:
+    from paramiko import *
+except ImportError: 
+    os.system('pip3 install paramiko') #FIXME: this is sloppy
+    os.system('pip install paramiko')            
 
 
 def addPath(ACISS_path):

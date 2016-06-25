@@ -1,10 +1,15 @@
-from paramiko import *
 import argparse
 import os
 import sys
 import subprocess
 import fileinput
 import io
+try:
+    from paramiko import *
+except ImportError: 
+    os.system('pip3 install paramiko') #FIXME: this is sloppy
+    os.system('pip install paramiko')            
+
 
 def addPath(ACISS_path):
     '''
@@ -173,6 +178,7 @@ def unixInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     addPath(ACISS_path)
     buildACISSRepo(usrname, pswd, ACISS_path, genome_path)
     createShortcut(shortcut_path)
+
 
 if __name__ == "__main__":
     '''
