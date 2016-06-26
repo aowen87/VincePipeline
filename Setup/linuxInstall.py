@@ -54,21 +54,23 @@ def createShortcut(sink_path):
         sys.exit()
         
     pypath = '#!' + pypath
-    #src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
-    #os.system('chmod +x {}'.format(src_path))
-    #with open(src_path, 'r+') as f:
-        #content = f.read()
-        #f.seek(0, 0)
-        #f.write(pypath.rstrip('\r\n') + '\n' + content)
-    #os.system("sed -i -e '1i#!{}\' {}".format(pypath, src_path))
-    #os.symlink(src_path, '{}'.format(sink_path))
-    
     src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
-    text = "#!/bin/bash\npython3 {}".format(src_path)
-    exe_file = open(sink_path, 'w')
-    exe_file.write(text)
-    exe_file.close()
-    os.system("chmod 755 {}".format(sink_path))
+    os.system('chmod +x {}'.format(src_path))
+    with open(src_path, 'r+') as f:
+        content = f.read()
+        f.seek(0, 0)
+        f.write(pypath.rstrip('\r\n') + '\n' + content)
+    #os.system("sed -i -e '1i#!{}\' {}".format(pypath, src_path))
+    os.symlink(src_path, '{}'.format(sink_path))
+    
+    #src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
+    #text = "#!/bin/bash\npython3 {}".format(src_path)
+    #with io.FileIO(sink_path, 'w') as file:
+        #file.write(text)
+    #exe_file = open(sink_path, 'w')
+    #exe_file.write(text)
+    #exe_file.close()
+    #os.system("chmod 755 {}".format(sink_path))
      
 
 def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
