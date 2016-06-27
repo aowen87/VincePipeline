@@ -6,8 +6,19 @@ import fileinput
 try:
     from paramiko import *
 except ImportError: 
-    os.system('pip3 install paramiko') #FIXME: this is sloppy
-    os.system('pip install paramiko')            
+    paramikoInstall()
+
+
+def paramikoInstall():
+    '''
+    '''
+    try:
+        suprocess.call(['pip3', 'install', 'paramiko'])
+    except Exception:
+        try:
+            suprocess.call(['pip', 'install', 'paramiko'])
+        except Exception: 
+            print("ERROR installing paramiko... you may first need to install pip")
 
 
 def addPath(ACISS_path):
@@ -74,10 +85,9 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
         sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
         sftp.close()
+        transport.close()
     except Exception as e:
         print("ERROR BUILDING REPO: ", e)
-    sftp.close()
-    transport.close()
 
 
 def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):

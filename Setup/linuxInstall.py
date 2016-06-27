@@ -7,8 +7,18 @@ import io
 try:
     from paramiko import *
 except ImportError: 
-    os.system('pip3 install paramiko') #FIXME: this is sloppy
-    os.system('pip install paramiko')            
+    paramikoInstall()
+
+def paramikoInstall():
+    '''
+    '''
+    try:
+        suprocess.call(['pip3', 'install', 'paramiko'])
+    except Exception:
+        try:
+            suprocess.call(['pip', 'install', 'paramiko'])
+        except Exception: 
+            print("ERROR installing paramiko... you may first need to install pip")
 
 
 def addPath(ACISS_path):
@@ -102,10 +112,9 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
         sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
         sftp.close()
+        transport.close()
     except Exception as e:
         print("ERROR BUILDING REPO: ", e)
-    sftp.close()
-    transport.close()
 
 
 def genomeTransfer(trans_sftp, genome_path, sink_dir):
@@ -168,7 +177,7 @@ def dirTransfer(trans_sftp, src_dir, sink_dir, file_excludes=[]):
                 trans_sftp.put(src_path, sink_path)
 
 
-def unixInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
+def linuxInstall(usrname, pswd, ACISS_path, shortcut_path, genome_path):
     '''
        Auto-Install install the pipeline. 
        param:
@@ -196,6 +205,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    unixInstall(usrname, pswd, 'UnixInstall', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
+    linuxInstall(usrname, pswd, 'LinuxInstall', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
 
 
