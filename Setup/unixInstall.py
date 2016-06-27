@@ -45,15 +45,15 @@ def createShortcut(sink_path):
     #with open(sink_path, 'r+') as f:
         #f.write(cmd_text)
 
-    proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
-    (out, err) = proc.communicate()
-    pypath = str(out)[2:-3]
-    if not pypath:
-        print("ERROR: unable to find python3 path...")
-        print("Make sure you have python3.x installed")
-        sys.exit()
+    #proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
+    #(out, err) = proc.communicate()
+    #pypath = str(out)[2:-3]
+    #if not pypath:
+        #print("ERROR: unable to find python3 path...")
+        #print("Make sure you have python3.x installed")
+        #sys.exit()
         
-    pypath = '#!' + pypath
+    #pypath = '#!' + pypath
     #src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
     #os.system('chmod +x {}'.format(src_path))
     #with open(src_path, 'r+') as f:
