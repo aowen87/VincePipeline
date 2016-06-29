@@ -23,7 +23,7 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, build, non_BS_mismatches, quality_s
           non_BS_mismatches (the number of non-BS mismatches -> int)
           quality_score (the quality score -> int)
     '''
-    resultsDir = "mapResults"
+    resultsDir = "mapResults" 
     if not os.path.isdir(resultsDir):
         os.system('mkdir {}'.format(resultsDir))
             

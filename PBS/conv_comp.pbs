@@ -6,7 +6,8 @@
 module load python/3.4.4
 module load methpipe
 
-cd _PATH_INSERT_
+cd _PATH_INSERT_/MethylationPipe
+
 
 python3 meth_convert.py ${brat_bw_dir} ${meth_output}
 python3 methylome_comp.py ${meth_dir} ${diff_out} ${wt_meth} ${wt_hmr}

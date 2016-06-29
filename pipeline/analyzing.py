@@ -18,7 +18,7 @@ def stepAnalyzing(fileDir, resultsDir, clean):
           resultsDir (a target directory to move results into -> str)
           clean (clean up extraneous output -> boolean) 
     """
-
+    resultsDir = '../' + resultsDir
     if not os.path.isdir(resultsDir):
         os.system('mkdir {}'.format(resultsDir))
         

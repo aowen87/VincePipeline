@@ -4,21 +4,14 @@ import sys
 import subprocess
 import fileinput
 import io
+import helper
+
 try:
     from paramiko import *
 except ImportError: 
-    paramikoInstall()
-
-def paramikoInstall():
-    '''
-    '''
-    try:
-        suprocess.call(['pip3', 'install', 'paramiko'])
-    except Exception:
-        try:
-            suprocess.call(['pip', 'install', 'paramiko'])
-        except Exception: 
-            print("ERROR installing paramiko... you may first need to install pip")
+    os.system('pip3 install paramiko')
+    os.system('pip install paramiko')
+    from paramiko import *
 
 
 def addPath(ACISS_path):
@@ -48,13 +41,6 @@ def createShortcut(sink_path):
     if os.path.exists(sink_path):
         print("ERROR: {} already exists...".format(sink_path))
         sys.exit()    
-    
-    #os.system('touch {}'.format(sink_path))
-    #src_path = os.path.dirname(os.getcwd()) + 'GUI/Main.pyw'
-    #cmd_text = "#!/bin/bash\npython3 {}\nIF %ERRORLEVEL% NEQ 0 GOTO TryPython\n:TryPython\npython {}".format(src_path, src_path)
-    #with open(sink_path, 'r+') as f:
-        #f.write(cmd_text)
-
     proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
     (out, err) = proc.communicate()
     pypath = str(out)[2:-3]
@@ -62,7 +48,6 @@ def createShortcut(sink_path):
         print("ERROR: unable to find python3 path...")
         print("Make sure you have python3.x installed")
         sys.exit()
-        
     pypath = '#!' + pypath
     src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
     os.system('chmod +x {}'.format(src_path))
@@ -70,18 +55,8 @@ def createShortcut(sink_path):
         content = f.read()
         f.seek(0, 0)
         f.write(pypath.rstrip('\r\n') + '\n' + content)
-    #os.system("sed -i -e '1i#!{}\' {}".format(pypath, src_path))
     os.symlink(src_path, '{}'.format(sink_path))
     
-    #src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
-    #text = "#!/bin/bash\npython3 {}".format(src_path)
-    #with io.FileIO(sink_path, 'w') as file:
-        #file.write(text)
-    #exe_file = open(sink_path, 'w')
-    #exe_file.write(text)
-    #exe_file.close()
-    #os.system("chmod 755 {}".format(sink_path))
-     
 
 def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
     '''
@@ -106,11 +81,12 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
             sftp.chdir(ACISS_path)
         dirTransfer(sftp, '../pipeline', './')
         dirTransfer(sftp, '../PBS', './')
-        dirTransfer(sftp, './', './', ['install.py', 'windowsInstall.py', 'unixInstall.py'])
-        genomeTransfer(sftp, genome_path, './')
+        dirTransfer(sftp, './', './', ['install.py', 'helper.py', 'windowsInstall.py', 'unixInstall.py', 'linuxInstall.py'])
+        sftp.mkdir('BRAT_BW')
+        genomeTransfer(sftp, genome_path, './BRAT_BW')
         sftp.mkdir('mapChip')
-        sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
-        sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
+        sftp.mkdir('MethylationPipe')
+        helper.organize(sftp)
         sftp.close()
         transport.close()
     except Exception as e:

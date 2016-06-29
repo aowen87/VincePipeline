@@ -3,22 +3,13 @@ import os
 import sys
 import subprocess
 import fileinput 
+
 try:
     from paramiko import *
 except ImportError: 
-    paramikoInstall()
-
-
-def paramikoInstall():
-    '''
-    '''
-    try:
-        suprocess.call(['pip3', 'install', 'paramiko'])
-    except Exception:
-        try:
-            suprocess.call(['pip', 'install', 'paramiko'])
-        except Exception: 
-            print("ERROR installing paramiko... you may first need to install pip")
+    os.system('pip3 install paramiko')
+    os.system('pip install paramiko')
+    from paramiko import *
 
 
 def addPath(ACISS_path):
@@ -79,11 +70,12 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
             sftp.chdir(ACISS_path)
         dirTransfer(sftp, '..\\pipeline', './')
         dirTransfer(sftp, '..\\PBS', './')
-        dirTransfer(sftp, '.\\', './', ['install.py', 'windowsInstall.py', 'unixInstall.py'])
-        genomeTransfer(sftp, genome_path, './')
+        dirTransfer(sftp, '.\\', './', ['install.py', 'helper.py', 'windowsInstall.py', 'unixInstall.py', 'linuxInstall.py'])
+        sftp.mkdir('BRAT_BW')
+        genomeTransfer(sftp, genome_path, './BRAT_BW')
         sftp.mkdir('mapChip')
-        sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
-        sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
+        sftp.mkdir('MethlyationPipe')
+        helper.organize()
         sftp.close()
         transport.close()
     except Exception as e:
