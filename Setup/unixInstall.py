@@ -5,7 +5,6 @@ import subprocess
 import fileinput
 import io
 import helper
-
 try:
     from paramiko import *
 except ImportError: 
@@ -77,7 +76,7 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         genomeTransfer(sftp, genome_path, './BRAT_BW')
         sftp.mkdir('mapChip')
         sftp.mkdir('MethylationPipe')
-        helper.organize()
+        helper.organize(sftp)
         sftp.close()
         transport.close()
     except Exception as e:

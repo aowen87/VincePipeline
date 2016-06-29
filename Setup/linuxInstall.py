@@ -181,6 +181,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     usrname = args.usrname
     pswd = args.pswd 
-    linuxInstall(usrname, pswd, 'LinuxInstall', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
+    linuxInstall(usrname, pswd, 'LinuxInstall', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/Nc12_genome_BRATBW')
 
 

@@ -75,7 +75,7 @@ def buildACISSRepo(usrname, pswd, ACISS_path, genome_path):
         genomeTransfer(sftp, genome_path, './BRAT_BW')
         sftp.mkdir('mapChip')
         sftp.mkdir('MethlyationPipe')
-        helper.organize()
+        helper.organize(sftp)
         sftp.close()
         transport.close()
     except Exception as e:
