@@ -1,20 +1,14 @@
 import sys
-from unixInstall import *
-from windowsInstall import *
-from linuxInstall import *
 import installer
 
 def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
     cur_os = str(sys.platform).lower()
     print(cur_os)#FIXME: remove after testing
     if cur_os == 'darwin':
-        #unixInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)    
         ins = installer.Installer('darwin')
     elif cur_os == 'linux':
-        #linuxInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)    
         ins = installer.Installer('linux')
     elif cur_os == 'win32' or cur_os == 'cygwin':
-        #windowsInstall(usrname, pswd, ACISS_path, shortcut_dest, genome_path)
         ins = installer.Installer('win32')
     else:
         print("ERROR: unsuported operating system")
