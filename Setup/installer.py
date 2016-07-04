@@ -4,7 +4,6 @@ import sys
 import subprocess
 import fileinput
 import io
-import helper
 try:
     from paramiko import *
 except ImportError: 
@@ -30,7 +29,6 @@ class Installer:
         '''
            Insert the aciss path into all appropriate files.
            param: ACISS_path -> a destination path on ACISS. 
-       
         '''
         path_dirs = ['..{}PBS'.format(self._divider), '..{}GUI'.format(self._divider)]
         for path_dir in path_dirs:
@@ -40,7 +38,6 @@ class Installer:
                     with fileinput.FileInput(file_path, inplace=True) as file:
                         for line in file:
                             print(line.replace('_PATH_INSERT_', ACISS_path), end='') 
- 
  
     def buildACISSRepo(self, usrname, pswd, ACISS_path, genome_path):
         '''
@@ -63,19 +60,20 @@ class Installer:
             except IOError:
                 sftp.mkdir(ACISS_path)
                 sftp.chdir(ACISS_path)
-            self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), '.{}'.format(self._divider))
-            self.dirTransfer(sftp, '..{}PBS'.format(self._divider), '.{}'.format(self._divider))
-            self.dirTransfer(sftp, '.{}'.format(self._divider), '.{}'.format(self._divider),
+            self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), './')
+            self.dirTransfer(sftp, '..{}PBS'.format(self._divider), './')
+            self.dirTransfer(sftp, '.{}'.format(self._divider), './',
                              ['install.py', 'helper.py', 'installer.py'])
             sftp.mkdir('BRAT_BW')
-            self.genomeTransfer(sftp, genome_path, '.{}BRAT_BW'.format(self._divider))
+            self.genomeTransfer(sftp, genome_path, './BRAT_BW')
             sftp.mkdir('mapChip')
             sftp.mkdir('MethylationPipe')
-            helper.organize(sftp)
+            self.organize(sftp)
             sftp.close()
             transport.close()
         except Exception as e:
             print("ERROR BUILDING REPO: ", e)
+            sys.exit()
 
     def genomeTransfer(self, trans_sftp, genome_path, sink_dir):
         '''
@@ -86,21 +84,30 @@ class Installer:
                   sink_dir: The ACISS directory/ path 
                   for installation. 
         '''
-        if genome_path[-1] == self._divider:
-            genome_path = genome_path[:-1]
-        if sink_dir[-1] == self._divider:
-            sink_dir = sink_dir[:-1]
+
+        if self._divider == '/':
+            offset = -1
+        else:
+            offset = -2
+        if genome_path[offset] == self._divider:
+            genome_path = genome_path[:offset]
+        if sink_dir[offset] == self._divider:
+            sink_dir = sink_dir[:offset]
         genome_dir = genome_path.split(self._divider)[-1] 
-        sink_dir   = sink_dir + self._divider + genome_dir 
+        sink_dir   = sink_dir + '/' + genome_dir 
         trans_sftp.mkdir(sink_dir)
         for root, dirs, files in os.walk(genome_path):
             for dr in dirs:                             
                 dir_path  = os.path.join(root, dr)
                 sink_path = dir_path.replace(genome_path, sink_dir) 
+                if self._os == 'win32':
+                    sink_path = sink_path.replace('\\', '/')
                 trans_sftp.mkdir(sink_path)
             for f in files:
                 file_path = os.path.join(root, f)
                 sink_path = file_path.replace(genome_path, sink_dir) 
+                if self._os == 'win32':
+                    sink_path = sink_path.replace('\\', '/')
                 trans_sftp.put(file_path, sink_path)
 
     def dirTransfer(self, trans_sftp, src_dir, sink_dir, file_excludes=[]):
@@ -113,10 +120,14 @@ class Installer:
                  file_excludes: A list of files that shouldn't be 
                  transfered to ACISS. 
         '''
-        if src_dir[-1] == self._divider:
-            src_dir = src_dir[:-1]
-        if sink_dir[-1] == self._divider:
-            sink_dir = sink_dir[:-1]
+        if self._divider == '/':
+            offset = -1
+        else:
+            offset = -2
+        if src_dir[offset] == self._divider:
+            src_dir = src_dir[:offset]
+        if sink_dir[offset] == self._divider:
+            sink_dir = sink_dir[:offset]
         
         for root, dirs, files in os.walk(src_dir):
             for dr in dirs:
@@ -128,11 +139,15 @@ class Installer:
                     if f not in file_excludes:
                         src_path  = os.path.join(root, f)
                         sink_path = src_path.replace(src_dir, sink_dir) 
+                        if self._os == 'win32':
+                            sink_path = sink_path.replace('\\', '/')
                         trans_sftp.put(src_path, sink_path)
             else:
                 for f in files:
                     src_path  = os.path.join(root, f)
                     sink_path = src_path.replace(src_dir, sink_dir) 
+                    if self._os == 'win32':
+                        sink_path = sink_path.replace('\\', '/')
                     trans_sftp.put(src_path, sink_path)
 
     def linuxShortcut(self, sink_path):
@@ -180,6 +195,27 @@ class Installer:
         exe_file.close()
         os.system("chmod 755 {}".format(sink_path))
      
+    def organize(self, sftp): 
+        sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
+        sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
+        sftp.rename('analyzing.py', 'BRAT_BW/analyzing.py')
+        sftp.rename('bisulfiteMap.py', 'BRAT_BW/bisulfiteMap.py')
+        sftp.rename('mappedDupl', 'BRAT_BW/mappedDupl')
+        sftp.rename('mappedNoDupl', 'BRAT_BW/mappedNoDupl')
+        sftp.rename('bratPipe.pbs', 'BRAT_BW/bratPipe.pbs')
+        sftp.rename('Nc12genome', 'BRAT_BW/Nc12genome')
+        sftp.rename('BS_genome_fasta', 'BRAT_BW/BS_genome_fasta')
+        sftp.rename('ave_meth.pbs', 'MethylationPipe/ave_meth.pbs')
+        sftp.rename('average_meth.py', 'MethylationPipe/average_meth.py')
+        sftp.rename('comp_avg.pbs', 'MethylationPipe/comp_avg.pbs')
+        sftp.rename('conv_avg.pbs', 'MethylationPipe/conv_avg.pbs')
+        sftp.rename('conv_comp.pbs', 'MethylationPipe/conv_comp.pbs')
+        sftp.rename('meth_compare.pbs', 'MethylationPipe/meth_compare.pbs')
+        sftp.rename('meth_convert.pbs', 'MethylationPipe/meth_convert.pbs')
+        sftp.rename('meth_convert.py', 'MethylationPipe/meth_convert.py')
+        sftp.rename('meth_pipe.pbs', 'MethylationPipe/meth_pipe.pbs')
+        sftp.rename('methylome_comp.py', 'MethylationPipe/methylome_comp.py')
+
     def win32Shortcut(self, sink_path):
         '''
            Create a shortcut that runs Main.pyw. 
@@ -211,8 +247,11 @@ class Installer:
                  genome_path: Local path/directory containing the
                  genome to be transfered to ACISS. 
         '''
-        self.addPath(ACISS_path)
-        self.buildACISSRepo(usrname, pswd, ACISS_path, genome_path)
+        try:
+            self.addPath(ACISS_path)
+            self.buildACISSRepo(usrname, pswd, ACISS_path, genome_path)
+        except Exception:
+            sys.exit()
         if self._os == 'darwin':
             self.unixShortcut(shortcut_path)
         elif self._os == 'linux':

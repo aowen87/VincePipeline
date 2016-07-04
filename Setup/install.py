@@ -4,7 +4,6 @@ import argparse
 
 def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
     cur_os = str(sys.platform).lower()
-    print(cur_os)#FIXME: remove after testing
     if cur_os == 'darwin':
         ins = installer.Installer('darwin')
     elif cur_os == 'linux':
@@ -16,7 +15,7 @@ def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
         print("Check documentation for manual installation")
         sys.exit()
 
-    ins.install(usrname, pswd, ACISS_path, shortcut_path, genome_path)
+    ins.install(usrname, pswd, ACISS_path, shortcut_dest, genome_path)
 
 
     
@@ -36,6 +35,5 @@ if __name__ == "__main__":
     shortcut_path = args.shortcut_path
     genome_path = args.genome_path
     install(usrname, pswd, ACISS_path, shortcut_path, genome_path)
-    #install(usrname, pswd, 'NewInstall', '/home/alister/Desktop', '/home/alister/Dropbox/BioInf/research/fakeGenome')
 
 
