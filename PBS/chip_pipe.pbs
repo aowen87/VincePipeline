@@ -3,7 +3,7 @@
 #PBS -q generic
 #PBS -m abe
 
-cd GnomeInstall/mapChip
+cd _PATH_INSERT_/mapChip
 
 module load python/3.3.4
 module load bowtie

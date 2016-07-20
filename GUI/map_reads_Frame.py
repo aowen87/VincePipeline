@@ -84,7 +84,7 @@ class ChipInterface(Interface):
                     
         if passed:          
             
-            command = "(cd GnomeInstall/mapChip; qsub -M {} -v chip_directory={},genome={},output_directory={} chip_pipe.pbs)".format(email, chip_directory, genome, output_directory)
+            command = "(cd _PATH_INSERT_/mapChip; qsub -M {} -v chip_directory={},genome={},output_directory={} chip_pipe.pbs)".format(email, chip_directory, genome, output_directory)
             
             self.aciss_connect(command, usrname, password)
         else:

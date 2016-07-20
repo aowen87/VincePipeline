@@ -182,7 +182,7 @@ class MethInterface(Interface):
 		email =				self._email.get()
 
 		passed = True
-		command = '(cd GnomeInstall/MethylationPipe; qsub -M {} -v '.format(email)
+		command = '(cd _PATH_INSERT_/MethylationPipe; qsub -M {} -v '.format(email)
 		vars = [email, username]
 		keys = []
 
