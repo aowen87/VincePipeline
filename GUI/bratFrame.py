@@ -111,7 +111,7 @@ class BratInterface(Interface):
                 passed = False
                                
         if passed:
-            command = ("(cd _PATH_INSERT_/BRAT_BW; qsub -M {} -v brat={},fastq={},"
+            command = ("(cd GnomeInstall/BRAT_BW; qsub -M {} -v brat={},fastq={},"
             "build={},mismatch={},score={},res={},clean={},map='mapResults' bratPipe.pbs)".format(email, 
             BRAT_genome_dir, fastq_dir, build_genome, mismatches, quality_score, 
             results_dir, clean))

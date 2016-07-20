@@ -1,4 +1,5 @@
 import argparse
+import clean
 import os
 import sys
 import subprocess
@@ -63,9 +64,9 @@ class Installer:
             self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), './')
             self.dirTransfer(sftp, '..{}PBS'.format(self._divider), './')
             self.dirTransfer(sftp, '.{}'.format(self._divider), './',
-                             ['install.py', 'helper.py', 'installer.py'])
+                             ['install.py', 'installer.py', 'clean.py'])
             sftp.mkdir('BRAT_BW')
-            self.genomeTransfer(sftp, genome_path, './BRAT_BW')
+            self.genomeTransfer(sftp, genome_path, './')
             sftp.mkdir('mapChip')
             sftp.mkdir('MethylationPipe')
             self.organize(sftp)
@@ -73,6 +74,8 @@ class Installer:
             transport.close()
         except Exception as e:
             print("ERROR BUILDING REPO: ", e)
+            clean.removeRemote(usrname, pswd, ACISS_path)
+            clean.removePaths(ACISS_path, self._os)
             sys.exit()
 
     def genomeTransfer(self, trans_sftp, genome_path, sink_dir):
@@ -131,17 +134,19 @@ class Installer:
         
         for root, dirs, files in os.walk(src_dir):
             for dr in dirs:
-                src_path  = os.path.join(root, dr)  
-                sink_path = src_path.replace(src_dir, sink_dir) 
-                trans_sftp.mkdir(sink_path)
+                if dr != '__pycache__':
+                    src_path  = os.path.join(root, dr)  
+                    sink_path = src_path.replace(src_dir, sink_dir) 
+                    trans_sftp.mkdir(sink_path)
             if file_excludes:
                 for f in files:
                     if f not in file_excludes:
                         src_path  = os.path.join(root, f)
-                        sink_path = src_path.replace(src_dir, sink_dir) 
-                        if self._os == 'win32':
-                            sink_path = sink_path.replace('\\', '/')
-                        trans_sftp.put(src_path, sink_path)
+                        if src_path.split(self._divider)[1] != '__pycache__':
+                            sink_path = src_path.replace(src_dir, sink_dir) 
+                            if self._os == 'win32':
+                                sink_path = sink_path.replace('\\', '/')
+                            trans_sftp.put(src_path, sink_path)
             else:
                 for f in files:
                     src_path  = os.path.join(root, f)
@@ -258,5 +263,4 @@ class Installer:
             self.linuxShortcut(shortcut_path)
         else:
             self.win32Shortcut(shortcut_path)
-
 

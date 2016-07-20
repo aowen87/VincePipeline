@@ -2,10 +2,8 @@
 
 #PBS -q generic
 #PBS -m abe
-#PBS -M pwj@uoregon.edu
--mail address
 
-cd _PATH_INSERT_/mapChip
+cd GnomeInstall/mapChip
 
 module load python/3.3.4
 module load bowtie

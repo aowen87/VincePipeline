@@ -1,0 +1,47 @@
+Author: Alister Maguire
+contact: aom@uoregon.edu or alisterowen87@gmail.com
+
+
+Installation:
+
+    Pre-reqs: Make sure that you have python 3.x installed on your machine. You should also 
+              install paramiko (a python package). The auto install is set up to try and
+              install paramiko for you, but this doesn't always work because of permissions. 
+              If you are on Windows, make sure that you have powershell installed and are
+              able to ssh into remote servers. 
+
+    **TODO** finish auto install guide once Hiranmayi completes the GUI. 
+
+BRAT-BW pipeline:
+
+    Input:
+
+        BRAT genome directory: The genome you wish to map the fastq files to. 
+                               If you wish to build a genome, check the build genome
+                               box and enter the name you wish to give the genome
+                               directory. If you already have a genome on ACISS
+                               that you'd like to use, enter the path to this 
+                               directory (inclusive).
+
+        fastq directory:       A directory containing the fastq files that you 
+                               wish perform the computations on. This directory
+                               should be located on ACISS. 
+
+        results directory:     This is the directory that the results will be stored in. 
+                               NOTE: you do not need to include a path when naming this 
+                               directory. By default, the results directory will be created
+                               in your primary pipeline directory with the given name. 
+
+        non-BS mismatches:     The number of allowed non-bisulfite mismatches. 
+
+        quality score:         An integer value representing the quality score. 
+
+        build genome:          Check this box if you wish to build a genome. 
+
+        remove extra output:   Check this box if you wish to remove extraneous output
+                               that results from this section of the pipeline. By default, 
+                               this box is checked. 
+        
+    Output: 
+        
+        wigFiles:              

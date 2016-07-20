@@ -43,16 +43,16 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, build, non_BS_mismatches, quality_s
     
     strand_count = defaultdict(int)
     for f in fastqFiles:
-        strand = f.split("_")[1].split("-")[0]
+        strand  =  f.split('/')[-1].split('.')[0] 
         strand_count[strand] += 1
-        os.system('trim -s {} -P N{}_{} -q {} -m {}'.format(f, strand, strand_count[strand], quality_score, non_BS_mismatches))
-        os.system('brat_bw -P {} -s N{}_{}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand, strand_count[strand], non_BS_mismatches)) 
+        os.system('trim -s {} -P {}_{} -q {} -m {}'.format(f, strand, strand_count[strand], quality_score, non_BS_mismatches))
+        os.system('brat_bw -P {} -s {}_{}_reads1.txt -o BSmapped.txt -W -C -m {}'.format(BRAT_genome_dir, strand, strand_count[strand], non_BS_mismatches)) 
         os.system('remove-dupl -r Nc12genome -s ./mappedDupl')  
-        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped_N{}_{} -s ./mappedNoDupl -B'.format(strand, strand_count[strand]))       
-        os.system('mv 5mC_BSmapped_N{}_{}_forw.txt {}'.format(strand, strand_count[strand], resultsDir))    
-        os.system('mv 5mC_BSmapped_N{}_{}_rev.txt {}'.format(strand, strand_count[strand], resultsDir)) 
+        os.system('acgt-count -r Nc12genome -P 5mC_BSmapped_{}_{} -s ./mappedNoDupl -B'.format(strand, strand_count[strand]))       
+        os.system('mv 5mC_BSmapped_{}_{}_forw.txt {}'.format(strand, strand_count[strand], resultsDir))    
+        os.system('mv 5mC_BSmapped_{}_{}_rev.txt {}'.format(strand, strand_count[strand], resultsDir)) 
         os.system('rm *.nodupl')
-        
+              
         
         
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 ----------------------------BRAT-BW pipe------------------------------
 Author:  Alister Maguire
-contact: aom@uoregon.edu or alisterowen@hotmail.com
+contact: aom@uoregon.edu or alisterowen87@gmail.com
 
     This pipeline contains the first two sections from Mike Rountree's
 BS-seq protocol. The first section, titled "Commands to run BRAT-BW to 
@@ -11,7 +11,7 @@ analyzing.py. Both sections are contained within a main GUI, which also
 contains other sections from the protocol that may be run separately.  
 
 
-Set-up: 
+Set-up and Manual Installation:
 
     Python:
         
@@ -20,7 +20,7 @@ Set-up:
     be installed. To see if paramiko is installed, open a terminal
     (powershell if on Windows), and type 'pip show paramiko'. If it's 
     installed, you should see the package details. Otherwise, you can 
-    install paramiko with the following command: 'pip install paramiko'. 
+    install paramiko with the following command: 'pip3 install paramiko'. 
 
 
 
