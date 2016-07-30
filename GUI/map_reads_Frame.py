@@ -11,7 +11,7 @@ class ChipInterface(Interface):
 
     def __init__(self, master):
         '''
-        Set up the main GUI interface and all class variables. 
+        Set up the main _PATH_INSERT_ interface and all class variables. 
         '''  
         Interface.__init__(self, master)
         #fonts, colors, padding, etc. 
@@ -42,7 +42,7 @@ class ChipInterface(Interface):
         output_label                 = Label(self, text="Chip Output Directory: ")
         self._output_directory_entry = Entry(self, width = ENTRY_W)
         Start                        = Button(self, text='RUN PIPELINE', command=self.run_pipeline)
-        #GUI structure
+        #_PATH_INSERT_ structure
         email_label.grid(row=0, column=0, sticky=W, padx=PADX, pady=PADY)
         self._email_entry.grid(row=0, column=1, sticky=W, padx=PADX, pady=PADY)
         usr_name_label.grid(row=1, column=0, sticky=W, padx=PADX, pady=PADY)

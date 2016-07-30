@@ -1,6 +1,6 @@
 __author__ = 'Alister Maguire'
 __date__ = '05/17/2016'
-__description__ = """The GUI for the launching and running bisulfiteMap.py 
+__description__ = """The _PATH_INSERT_ for the launching and running bisulfiteMap.py 
 and analyzing.py as a single pipeline. """
 
 from tkinter import *
@@ -12,7 +12,7 @@ class BratInterface(Interface):
     
     def __init__(self, master):
         '''
-        Set up the main GUI interface and all class variables. 
+        Set up the main _PATH_INSERT_ interface and all class variables. 
         '''  
         Interface.__init__(self, master)
         
@@ -56,7 +56,7 @@ class BratInterface(Interface):
         start                    = Button(self, text='RUN PIPELINE', command=self.run_pipeline)
         self._email_entry.focus_set()
        
-        #GUI structure
+        #_PATH_INSERT_ structure
         email_label.grid(row=0, column=0, sticky=W, padx=PADX, pady=PADY)
         self._email_entry.grid(row=0, column=1, sticky=W, padx=PADX, pady=PADY)
         usr_name_label.grid(row=1, column=0, sticky=W, padx=PADX, pady=PADY)
@@ -81,7 +81,7 @@ class BratInterface(Interface):
     
     def run_pipeline(self):
         '''
-        Retrieve entries from the GUI, create the ACISS
+        Retrieve entries from the _PATH_INSERT_, create the ACISS
         command, and call aciss_connect().
         '''
         #Retrieve entries

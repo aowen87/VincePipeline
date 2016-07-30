@@ -9,9 +9,11 @@ except ImportError:
     print("ERROR: manual installation of paramiko is required")
 
 def rmShortcut(shortcut_path):
+    print("Removing shortcut")
     subprocess.call(["rm", shortcut_path]) 
 
 def removePaths(ACISS_path, osystem):
+    print("Removing path insertions")
     if osystem == 'linux' or osystem == 'darwin':
         divider = '/'
     elif osystem == 'win32':
@@ -19,7 +21,9 @@ def removePaths(ACISS_path, osystem):
     else:
         print("Invalid or unsuported os: ", osystem)
         sys.exit()
-    
+    cache_path = ((divider).join(os.path.dirname(os.path.abspath(__file__)).split(divider)[:-1]) 
+                 + "{}GUI{}__pycache__".format(divider, divider))
+    os.system("rm -r {}".format(cache_path))
     path_dirs = ['..{}PBS'.format(divider), '..{}GUI'.format(divider)]
     for path_dir in path_dirs:
         for root, dirs, files in os.walk(path_dir):
@@ -31,10 +35,12 @@ def removePaths(ACISS_path, osystem):
 
 def removeRemote(usrname, pswd, ACISS_path):
     try:
+        print("Attempting to connect to ACISS...")
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())
         client.load_system_host_keys()
         client.connect('aciss.uoregon.edu', username=usrname, password=pswd)
+        print("connected to ACISS!\nRemoving repo")
         command = 'rm -rf {}'.format(ACISS_path)
         stdin, stdout, stderr = client.exec_command(command)
         client.close()
@@ -50,6 +56,7 @@ def fullClean(usrname, pswd, ACISS_path, shortcut_path, osystem):
     removeRemote(usrname, pswd, ACISS_path)
     removePaths(ACISS_path, osystem)
     rmShortcut(shortcut_path)
+    print("Uninstall complete")
     
 
 if __name__ == "__main__":

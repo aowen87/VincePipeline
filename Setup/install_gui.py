@@ -15,6 +15,8 @@ class InstallInterface(Frame):
 
     def __init__(self, parent):
         Frame.__init__(self, parent, padding = '0.2i')
+        
+        self._cur_os = str(sys.platform).lower()
 
         # Style
         PADX = 2
@@ -80,6 +82,8 @@ class InstallInterface(Frame):
     def load_directory(self):
 
         path_name = filedialog.askdirectory()
+        if self._cur_os == "win32" or self._cur_os == "cygwin":
+            path_name = path_name.replace("/", "\\")
         self._genomepath.insert(INSERT, path_name)
 
     def run_setup(self):
@@ -89,6 +93,8 @@ class InstallInterface(Frame):
         path_dir = self._pathdir.get()
         shortcut_path = os.path.join(os.path.expanduser('~'), 'Desktop')
         genome_path = self._genomepath.get()
+        if self._cur_os == 'win32' or self._cur_os == 'cygwin':
+            shortcut_path = shortcut_path.replace("/", "\\") 
 
         #if os.path.join(shortcut_path, 'pipeline'):
         #    self.insert_text('The shortcut already exists!', self._message_txt)
@@ -104,16 +110,15 @@ class InstallInterface(Frame):
         password = self._password.get()
         path_dir = self._pathdir.get()
         shortcut_path = os.path.join(os.path.expanduser('~'), 'Desktop')
-        cur_os = str(sys.platform).lower()
-        if cur_os == 'darwin' or cur_os == 'linux':
+        if self._cur_os == 'darwin' or self._cur_os == 'linux':
             shortcut_path = shortcut_path + "/pipeline"
-        elif cur_os == 'win32' or cur_os == 'cygwin':
-            shortcut_path = shortcut_path + "\\pipeline"
+        elif self._cur_os == 'win32' or self._cur_os == 'cygwin':
+            shortcut_path = shortcut_path.replace("/", "\\") + "\\pipeline.cmd"
         else:
-            self.insert_text("Invalid or unsupported os: " + cur_os, self._message_text)
+            self.insert_text("Invalid or unsupported os: " + self._cur_os, self._message_text)
             sys.exit()
         #print(local_path)
-        fullClean(username, password, path_dir, shortcut_path, cur_os)
+        fullClean(username, password, path_dir, shortcut_path, self._cur_os)
 
 if __name__ == '__main__':
     tk = Tk()

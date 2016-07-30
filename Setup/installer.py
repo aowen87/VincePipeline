@@ -31,6 +31,7 @@ class Installer:
            Insert the aciss path into all appropriate files.
            param: ACISS_path -> a destination path on ACISS. 
         '''
+        print("Inserting paths")
         path_dirs = ['..{}PBS'.format(self._divider), '..{}GUI'.format(self._divider)]
         for path_dir in path_dirs:
             for root, dirs, files in os.walk(path_dir):
@@ -51,27 +52,34 @@ class Installer:
                  uploaded into the repository. 
         '''
         try:
+            print("Attempting to connect to ACISS...")
             host = "aciss.uoregon.edu"
             port = 22
             transport = Transport((host, port))
             transport.connect(username=usrname, password=pswd)
             sftp = SFTPClient.from_transport(transport)
+            print("Connected to ACISS!")
             try:
                 sftp.chdir(ACISS_path)
             except IOError:
                 sftp.mkdir(ACISS_path)
                 sftp.chdir(ACISS_path)
+            print("Transfering directries")
             self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), './')
             self.dirTransfer(sftp, '..{}PBS'.format(self._divider), './')
             self.dirTransfer(sftp, '.{}'.format(self._divider), './',
                              ['install.py', 'installer.py', 'clean.py', 'install_gui.py'])
+            print("Directoires transfered")
             sftp.mkdir('BRAT_BW')
+            print("Transfering genome (this may take a while)")
             self.genomeTransfer(sftp, genome_path, './')
+            print("Genome transfered\nOrganizing repo")
             sftp.mkdir('mapChip')
             sftp.mkdir('MethylationPipe')
             self.organize(sftp)
             sftp.close()
             transport.close()
+            print("Successfully installed!")
         except Exception as e:
             print("ERROR BUILDING REPO: ", e)
             clean.removeRemote(usrname, pswd, ACISS_path)
