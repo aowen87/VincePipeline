@@ -64,7 +64,7 @@ class Installer:
             self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), './')
             self.dirTransfer(sftp, '..{}PBS'.format(self._divider), './')
             self.dirTransfer(sftp, '.{}'.format(self._divider), './',
-                             ['install.py', 'installer.py', 'clean.py'])
+                             ['install.py', 'installer.py', 'clean.py', 'install_gui.py'])
             sftp.mkdir('BRAT_BW')
             self.genomeTransfer(sftp, genome_path, './')
             sftp.mkdir('mapChip')

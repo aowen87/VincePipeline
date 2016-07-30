@@ -1,4 +1,5 @@
 import argparse
+import sys
 import subprocess
 import fileinput
 import os
@@ -15,6 +16,9 @@ def removePaths(ACISS_path, osystem):
         divider = '/'
     elif osystem == 'win32':
         divider = '\\'
+    else:
+        print("Invalid or unsuported os: ", osystem)
+        sys.exit()
     
     path_dirs = ['..{}PBS'.format(divider), '..{}GUI'.format(divider)]
     for path_dir in path_dirs:
@@ -61,5 +65,4 @@ if __name__ == "__main__":
     ACISS_path    = args.ACISS_path
     shortcut_path = args.shortcut_path
     osystem       = args.osystem
-    print('shortcut path: ', shortcut_path)    
-    clean(usrname, pswd, ACISS_path, shortcut_path, osystem)
+    Fullclean(usrname, pswd, ACISS_path, shortcut_path, osystem)

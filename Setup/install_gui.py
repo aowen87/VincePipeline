@@ -67,7 +67,7 @@ class InstallInterface(Frame):
         run_uninstall = Button(self, text = 'Uninstall Pipeline', command = self.uninstall)
         run_uninstall.grid(row = 5, column = 2, columnspan = 1, sticky = E, padx = PADX, pady = PADY)
 
-        self._username.focus_set()
+        self._pathdir.focus_set()
 
     def insert_text(self, string, text_box):
         """
@@ -96,7 +96,7 @@ class InstallInterface(Frame):
 
         self.insert_text(shortcut_path, self._message_txt)
 
-        install(username, password, path_dir, '/Users/hrnmy/Desktop', genome_path)
+        install(username, password, path_dir, shortcut_path, genome_path)
 
     def uninstall(self):
 
@@ -104,11 +104,16 @@ class InstallInterface(Frame):
         password = self._password.get()
         path_dir = self._pathdir.get()
         shortcut_path = os.path.join(os.path.expanduser('~'), 'Desktop')
-        genome_path = self._genomepath.get()
-
+        cur_os = str(sys.platform).lower()
+        if cur_os == 'darwin' or cur_os == 'linux':
+            shortcut_path = shortcut_path + "/pipeline"
+        elif cur_os == 'win32' or cur_os == 'cygwin':
+            shortcut_path = shortcut_path + "\\pipeline"
+        else:
+            self.insert_text("Invalid or unsupported os: " + cur_os, self._message_text)
+            sys.exit()
         #print(local_path)
-
-        fullClean(username, password, path_dir, shortcut_path, genome_path)
+        fullClean(username, password, path_dir, shortcut_path, cur_os)
 
 if __name__ == '__main__':
     tk = Tk()
