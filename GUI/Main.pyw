@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 #!/usr/bin/python3
+#!/usr/bin/python3
+#!/usr/bin/python3
+#!/usr/bin/python3
+#!/usr/bin/python3
 __author__ = 'Alister Maguire'
 __date__ = '05/31/2016'
 __description__ = "Main class to launch a pipeline notebook."

@@ -71,6 +71,8 @@ class InstallInterface(Frame):
 
         self._pathdir.focus_set()
 
+
+
     def insert_text(self, string, text_box):
         """
         make text box active then disable after adding text.
@@ -78,6 +80,8 @@ class InstallInterface(Frame):
         text_box.configure(state=NORMAL)
         text_box.insert(INSERT, string)
         text_box.configure(state=DISABLED)
+
+
 
     def load_directory(self):
 

@@ -1,16 +1,90 @@
-Author: Alister Maguire
-contact: aom@uoregon.edu or alisterowen87@gmail.com
+Project contributors:
+    Alister Maguire, Hiranmayi Duvvuri, Pat Johnson, Xi Zhang
+
+contact: 
+    aom@uoregon.edu or alisterowen87@gmail.com
+    Specific question regarding individual pipelines
+    can be sent to contacts found within their respective
+    documenations (located in the docs folder). 
 
 
 Installation:
 
-    Pre-reqs: Make sure that you have python 3.x installed on your machine. You should also 
+    Currently supported OS:
+              *Linux (Debian tested)
+              *Mac
+              *Windows 10
+              No other systems have been tested. 
+
+    Pre-reqs: 
+              Make sure that you have python 3.x installed on your machine. You should also 
               install paramiko (a python package). The auto install is set up to try and
               install paramiko for you, but this doesn't always work because of permissions. 
+              If you have pip installed, you can install paramiko by entering the following
+              command in a terminal/powershell: sudo pip install paramiko
               If you are on Windows, make sure that you have powershell installed and are
               able to ssh into remote servers. 
 
-    **TODO** finish auto install guide once Hiranmayi completes the GUI. 
+    Auto-installation (recommended):
+              For auto-installation, open a terminal (powershell if on Windows), and navigate
+              to the Setup directory. Once here, you will run install_gui.py by launching 
+              python. Make sure that you are launching with python 3 and not python 2. If python
+              3 is your default, you will type the following command into your terminal and 
+              press enter:
+              
+              python install_gui.py
+
+              If python 2 is your default, use the following command:
+
+              python3 install_gui.py
+
+              If you don't know which version is you default, you can find out by typing the
+              following command:
+              
+              python --version
+
+              Once install_gui.py is invoked, you will see a window with several entry boxes. 
+              Most are self explanitory. The genome is an optional reference genome that you 
+              can transfer to ACISS during installation. You will see a progress report being 
+              printed in the terminal. Once complete, you should see a message that says 
+              "Successfully installed". If something happens to go wrong, and you aren't sure 
+              why, you can contact us through the provided emails. If successfull, you should 
+              have a shorcut icon on your desktop. Double click the shortcut to launch the 
+              pipeline. 
+    
+    Auto-Uninstallation:
+              If you wish to uninstall, invoke install_gui.py, enter your ACISS user name and
+              password, enter the path to the ACISS repo, and click uninstall. The desktop 
+              shortcut and ACISS repo will be removed, and the GitHub repository will revert
+              back to its original state.  
+
+    Manual installation:
+              There may be instances in which you wish to install manually. If this is the case, 
+              See the documentation within the docs folder for details on each pipeline and
+              their requirements. 
+
+
+Usage:
+    
+        With auto-installation, the directories are set up as follows:
+
+                                  MainInstallDirectory
+                                           |
+                                           |
+                    ---------------------------------------------
+                    |         |            |                    |
+                BRAT_BW    mapChip    MethylationPipe    TransferedGenome
+
+
+        BRAT_BW, mapChip, and MethylationPipe are the three directories that 
+    correspond to the three pipelines. When you run a pipeline, all computations 
+    will take place from within its respective directory. For instance, if 
+    you run the BRAT-BW pipeline, all computations will take place within 
+    BRAT_BW. This means that, if you wish to use a transfered genome, you can
+    either place this genome in the pipeline's directory and enter the genome
+    name without a path, or you can have the genome located elsewhere and 
+    include the entire path when you run the computation. 
+
 
 BRAT-BW pipeline:
 
@@ -21,7 +95,7 @@ BRAT-BW pipeline:
                                box and enter the name you wish to give the genome
                                directory. If you already have a genome on ACISS
                                that you'd like to use, enter the path to this 
-                               directory (inclusive).
+                               directory. 
 
         fastq directory:       A directory containing the fastq files that you 
                                wish perform the computations on. This directory
@@ -44,4 +118,8 @@ BRAT-BW pipeline:
         
     Output: 
         
-        wigFiles:              
+        wigFiles:              Contains the resulting wig files and bedgraph files. 
+
+        mergedFiles:           These files are used within the methylation pipeline. 
+
+        5mCAverages:           Output from average calculations.  

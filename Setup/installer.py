@@ -71,9 +71,10 @@ class Installer:
                              ['install.py', 'installer.py', 'clean.py', 'install_gui.py'])
             print("Directoires transfered")
             sftp.mkdir('BRAT_BW')
-            print("Transfering genome (this may take a while)")
-            self.genomeTransfer(sftp, genome_path, './')
-            print("Genome transfered\nOrganizing repo")
+            if genome_path != "":
+                print("Transfering genome (this may take a while)")
+                self.genomeTransfer(sftp, genome_path, './')
+                print("Genome transfered\nOrganizing repo")
             sftp.mkdir('mapChip')
             sftp.mkdir('MethylationPipe')
             self.organize(sftp)
