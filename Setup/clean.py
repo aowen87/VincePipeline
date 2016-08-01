@@ -9,10 +9,24 @@ except ImportError:
     print("ERROR: manual installation of paramiko is required")
 
 def rmShortcut(shortcut_path):
+    """
+       Remove the pipeline shortcut.
+       param:
+             shortcut_path: a string representation of the 
+             shorcut path. 
+    """
     print("Removing shortcut")
     subprocess.call(["rm", shortcut_path]) 
 
 def removePaths(ACISS_path, osystem):
+    """
+       Remove all paths that were added to various files. These
+       include the GUI files and PBS files. 
+       param: 
+             ACISS_path: string representation of the path to the
+             ACISS repo. 
+            osystem: string representation of the current os. 
+    """
     print("Removing path insertions")
     if osystem == 'linux' or osystem == 'darwin':
         divider = '/'
@@ -39,6 +53,13 @@ def removePaths(ACISS_path, osystem):
                         print(line.replace(ACISS_path, '_PATH_INSERT_'), end='')     
 
 def removeRemote(usrname, pswd, ACISS_path):
+    """
+       Remove the remote repo on ACISS. 
+       param:
+             usrname: string representation of the ACISS user name. 
+             pswd: string representation of the ACISS password. 
+             ACISS_path: string rep of the path to the ACISS repo. 
+    """
     try:
         print("Attempting to connect to ACISS...")
         client = SSHClient()
@@ -65,6 +86,9 @@ def fullClean(usrname, pswd, ACISS_path, shortcut_path, osystem):
     
 
 if __name__ == "__main__":
+    """
+       For use with the command line. 
+    """
     parser = argparse.ArgumentParser("Remove install")
     parser.add_argument('usrname', type=str)
     parser.add_argument('password', type=str)
