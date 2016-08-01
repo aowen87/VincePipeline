@@ -174,6 +174,7 @@ class Installer:
         sink_path = sink_path + '/pipeline'
         if os.path.exists(sink_path):
             print("ERROR: {} already exists...".format(sink_path))
+            print("shorcut not created")
             sys.exit()    
         proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
@@ -181,7 +182,7 @@ class Installer:
         if not pypath:
             print("ERROR: unable to find python3 path...")
             print("Make sure you have python3.x installed")
-            sys.exit()
+            sys.exit()                                 #FIXME: raise error instead?
         pypath = '#!' + pypath
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
         os.system('chmod +x {}'.format(src_path))
@@ -202,13 +203,44 @@ class Installer:
         if os.path.exists(sink_path):
             print("ERROR: {} already exists...".format(sink_path))
             sys.exit()    
+
+
+        #FIXME: testing block begin
+        proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
+        pypath = str(out)[2:-3]
+        if not pypath:
+            print("ERROR: unable to find python3 path...")
+            print("Make sure you have python3.x installed")
+            sys.exit()                                 #FIXME: raise error instead?
+        py_call = pypath.split('/')[-1]
+        #FIXME: testing block end 
+
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
-        text = "#!/bin/bash\npython3 {}".format(src_path)
+        text = "#!/bin/bash\n{} {}".format(py_call, src_path)
         exe_file = open(sink_path, 'w')
         exe_file.write(text)
         exe_file.close()
         os.system("chmod 755 {}".format(sink_path))
-     
+    
+    def win32Shortcut(self, sink_path):
+        '''
+           Create a shortcut that runs Main.pyw. 
+           param: sink_path -> where the shortcut should
+                  be installed. 
+        '''
+        if sink_path[-1] == '\\':
+            sink_path = sink_path[:-1]
+        sink_path = sink_path + '\\pipeline.cmd'
+        if os.path.exists(sink_path):
+            print("ERROR: {} already exists...".format(sink_path))
+            sys.exit()    
+        os.system('touch {}'.format(sink_path)) 
+        src_path = os.path.dirname(os.getcwd()) + '\\GUI\\Main.pyw'
+        cmd_text = "python3 {}\nIF %ERRORLEVEL% NEQ 0 GOTO TryPython\n:TryPython\npython {}".format(src_path, src_path)
+        with open(sink_path, 'r+') as f:
+            f.write(cmd_text)
+
     def organize(self, sftp): 
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
         sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
@@ -229,24 +261,6 @@ class Installer:
         sftp.rename('meth_convert.py', 'MethylationPipe/meth_convert.py')
         sftp.rename('meth_pipe.pbs', 'MethylationPipe/meth_pipe.pbs')
         sftp.rename('methylome_comp.py', 'MethylationPipe/methylome_comp.py')
-
-    def win32Shortcut(self, sink_path):
-        '''
-           Create a shortcut that runs Main.pyw. 
-           param: sink_path -> where the shortcut should
-                  be installed. 
-        '''
-        if sink_path[-1] == '\\':
-            sink_path = sink_path[:-1]
-        sink_path = sink_path + '\\pipeline.cmd'
-        if os.path.exists(sink_path):
-            print("ERROR: {} already exists...".format(sink_path))
-            sys.exit()    
-        os.system('touch {}'.format(sink_path)) 
-        src_path = os.path.dirname(os.getcwd()) + '\\GUI\\Main.pyw'
-        cmd_text = "python3 {}\nIF %ERRORLEVEL% NEQ 0 GOTO TryPython\n:TryPython\npython {}".format(src_path, src_path)
-        with open(sink_path, 'r+') as f:
-            f.write(cmd_text)
 
     def install(self, usrname, pswd, ACISS_path, shortcut_path, genome_path):
         '''

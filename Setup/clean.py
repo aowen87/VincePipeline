@@ -21,8 +21,13 @@ def removePaths(ACISS_path, osystem):
     else:
         print("Invalid or unsuported os: ", osystem)
         sys.exit()
-    cache_path = ((divider).join(os.path.dirname(os.path.abspath(__file__)).split(divider)[:-1]) 
-                 + "{}GUI{}__pycache__".format(divider, divider))
+
+    gui_path   = ((divider).join(os.path.dirname(os.path.abspath(__file__)).split(divider)[:-1]) 
+                   + "{}GUI{}".format(divider, divider))
+    cache_path = gui_path + "__pycache__"
+    Main_path  = gui_path + "Main.pyw"
+    main_file  = open(Main_path).readlines()
+    open(Main_path, 'w').writelines(main_file[1:-1])#FIXME: testing
     os.system("rm -r {}".format(cache_path))
     path_dirs = ['..{}PBS'.format(divider), '..{}GUI'.format(divider)]
     for path_dir in path_dirs:
