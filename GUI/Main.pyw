@@ -1,4 +1,4 @@
-__author__ = 'Alister Maguire'
+__author__= 'Alister Maguire'
 __date__ = '05/31/2016'
 __description__ = "Main class to launch a pipeline notebook."
 
@@ -21,9 +21,3 @@ if __name__ == "__main__":
     notebook     = masterNotebook(root)
     brat_pipe    = BratInterface(notebook)
     meth_pipe    = MethInterface(notebook)
-    chip_seq     = ChipInterface(notebook)
-    notebook.addFrame(brat_pipe, 'BRAT Pipe')
-    notebook.addFrame(meth_pipe, 'Methylation Pipeline')
-    notebook.addFrame(chip_seq, 'ChIP-seq Analysis')
-    root.mainloop()
-    

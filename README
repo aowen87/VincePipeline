@@ -1,0 +1,187 @@
+Project contributors:
+    Alister Maguire, Hiranmayi Duvvuri, Pat Johnson, Xi Zhang
+
+contact: 
+    aom@uoregon.edu or alisterowen87@gmail.com
+    Specific question regarding individual pipelines
+    can be sent to contacts found within their respective
+    documenations (located in the doc folder). 
+
+
+Installation:
+
+    Currently supported OS:
+              *Linux (Debian tested)
+              *Mac
+              *Windows 10
+              No other systems have been tested. 
+
+    Pre-reqs: 
+              Make sure that you have python 3.x installed on your machine. You should also 
+              install paramiko (a python package). The auto install is set up to try and
+              install paramiko for you, but this doesn't always work because of permissions. 
+              If you have pip installed, you can install paramiko by entering the following
+              command in a terminal/powershell: sudo pip install paramiko
+              If you are on Windows, make sure that you have powershell installed and are
+              able to ssh into remote servers. 
+
+    Auto-installation (recommended):
+              For auto-installation, open a terminal (powershell if on Windows), and navigate
+              to the Setup directory. Once here, you will run runInstall.py by launching 
+              python. Make sure that you are launching with python 3 and not python 2. If python
+              3 is your default, you will type the following command into your terminal and 
+              press enter:
+              
+              python runInstall.py
+
+              If python 2 is your default, use the following command:
+
+              python3 runInstall.py
+
+              If you don't know which version is you default, you can find out by typing the
+              following command:
+              
+              python --version
+
+              Once runInstall.py is invoked, you will see a window with several entry boxes. 
+              Most are self explanitory. The genome is an optional reference genome that you 
+              can transfer to ACISS during installation. You will see a progress report being 
+              printed in the terminal. Once complete, you should see a message that says 
+              "Successfully installed". If something happens to go wrong, and you aren't sure 
+              why, you can contact us through the provided emails. If successfull, you should 
+              have a shorcut icon on your desktop. Double click the shortcut to launch the 
+              pipeline. 
+    
+    Auto-Uninstallation:
+              If you wish to uninstall, invoke runInstall.py, enter your ACISS user name and
+              password, enter the path to the ACISS repo, and click uninstall. The desktop 
+              shortcut and ACISS repo will be removed, and the GitHub repository will revert
+              back to its original state.  
+
+    Manual installation:
+              There may be instances in which you wish to install manually. If this is the case, 
+              See the documentation within the doc folder for details on each pipeline and
+              their requirements. 
+
+
+Usage:
+    
+        With auto-installation, the directories are set up as follows:
+
+                                  MainInstallDirectory
+                                           |
+                                           |
+                    ---------------------------------------------
+                    |         |            |                    |
+                BRAT_BW    mapChip    MethylationPipe    TransferedGenome
+
+
+        BRAT_BW, mapChip, and MethylationPipe are the three directories that 
+    correspond to the three pipelines. When you run a pipeline, all computations 
+    will take place from within its respective directory. For instance, if 
+    you run the BRAT-BW pipeline, all computations will take place within 
+    BRAT_BW. This means that, if you wish to use a transfered genome, you can
+    either place this genome in the pipeline's directory and enter the genome
+    name without a path, or you can have the genome located elsewhere and 
+    include the entire path when you run the computation. 
+        All Pipelines have an option to input an email address. If you choose to
+    do so, you will recieve an email notification when the pipeline starts and 
+    ends. The user name and password entries are for your ACISS account information. 
+
+BRAT-BW pipeline:
+
+    Input:
+
+        BRAT genome directory: The genome you wish to map the fastq files to. 
+                               If you wish to build a genome, check the build genome
+                               box and enter the name you wish to give the genome
+                               directory. If you already have a genome on ACISS
+                               that you'd like to use, enter the path to this 
+                               directory. 
+
+        fastq directory:       A directory containing the fastq files that you 
+                               wish perform the computations on. This directory
+                               should be located on ACISS. 
+
+        results directory:     This is the directory that the results will be stored in. 
+                               NOTE: you do not need to include a path when naming this 
+                               directory. By default, the results directory will be created
+                               in your primary pipeline directory with the given name. 
+
+        non-BS mismatches:     The number of allowed non-bisulfite mismatches. 
+
+        quality score:         An integer value representing the quality score. 
+
+        build genome:          Check this box if you wish to build a genome. 
+
+        remove extra output:   Check this box if you wish to remove extraneous output
+                               that results from this section of the pipeline. By default, 
+                               this box is checked. 
+        
+    Output: 
+        
+        wigFiles:              Contains the resulting wig files and bedgraph files. 
+
+        mergedFiles:           These files are used within the methylation pipeline. 
+
+        5mCAverages:           Output from average calculations.  
+
+
+Methylation Pipeline:
+    
+    Input:
+       
+        .meth Conversion:                This tab contains the information for 
+                                         meth_convert.py
+
+            converted files directory    This directory contains the files from 
+                                         mergedFiles in the BRAT-BW pipeline.
+
+            results directory            This directory will contain the results
+                                         from meth_convert.py in the form of the
+                                         .hmr and .meth files.
+                                         Files are output in the following format:
+                                         prefix_strand_suffix
+                                         These files will be used in the rest of the
+                                         methylation pipeline.
+
+        methylome comparison:            This tab contains the information for 
+                                         methylome_comp.py
+
+            meth conversion directory    This directory contains the output from
+                                         meth_convert.py, or the .hmr and .meth files
+                                         for each sample.
+
+            results directory            This directory will contain the results from
+                                         methylome_comp.py outputting .methdiff files
+                                         as well as files containing the scores from
+                                         sample 1 and sample 2 with sample 1 being the
+                                         wild type or given sample and sample 2 being the
+                                         samples in the input directory.
+
+            .meth WT sample              This is the .meth file of the sample all other
+                                         samples will be compared to.
+
+            .hmr WT sample               This is the .hmr file of the sample all other
+                                         samples will be compared to.
+
+Chip-Seq analysis:
+    
+    Input:
+       
+        ChiP Reads Directory:    This tab contains the information for chip_map_reads.py
+
+        Genome:                  If you have a reference genome that you'd like to use, 
+                                 you can enter this directory. Otherwise, enter a fasta 
+                                 file, and the genome will be created from this. 
+
+        Chip Output directory:   This directory will contain the resulting files. 
+
+    Output:
+        
+        <your_results_directory>/results: .bam and .bai files.
+
+
+
+For futher questions, see documentation within the doc folder, or contact one of the
+contributors. 

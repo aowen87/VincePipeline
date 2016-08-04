@@ -20,8 +20,6 @@ def install(usrname, pswd, ACISS_path, shortcut_dest, genome_path):
 
     
 if __name__ == "__main__":
-    '''
-    '''
     parser = argparse.ArgumentParser("Setup for Vince's pipeline")
     parser.add_argument('usrname', type=str)
     parser.add_argument('pswd', type=str, default='')

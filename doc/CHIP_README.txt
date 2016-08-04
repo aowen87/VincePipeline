@@ -2,7 +2,7 @@
 Author:	 Pat Johnson, Alister Maguire
 contact: pwj@uoregon.edu (pj3394b@gmail.com), aom@uoregon.edu
 
-	This pipeline map reads to a genome for dispay on IGV and
+	This pipeline maps reads to a genome for dispay on IGV and
 	is contained in the main GUI.
 
 

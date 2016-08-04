@@ -1,7 +1,7 @@
 __author__ = 'Hiranmayi Duvvuri, Alister Maguire'
 __date__ = '06/01/2016'
 __description__ = """
-GUI parent class
+_PATH_INSERT_ parent class
 """
 
 from tkinter import *

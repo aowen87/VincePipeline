@@ -1,4 +1,5 @@
 import argparse
+import clean
 import os
 import sys
 import subprocess
@@ -30,6 +31,7 @@ class Installer:
            Insert the aciss path into all appropriate files.
            param: ACISS_path -> a destination path on ACISS. 
         '''
+        print("Inserting paths")
         path_dirs = ['..{}PBS'.format(self._divider), '..{}GUI'.format(self._divider)]
         for path_dir in path_dirs:
             for root, dirs, files in os.walk(path_dir):
@@ -50,29 +52,39 @@ class Installer:
                  uploaded into the repository. 
         '''
         try:
+            print("Attempting to connect to ACISS...")
             host = "aciss.uoregon.edu"
             port = 22
             transport = Transport((host, port))
             transport.connect(username=usrname, password=pswd)
             sftp = SFTPClient.from_transport(transport)
+            print("Connected to ACISS!")
             try:
                 sftp.chdir(ACISS_path)
             except IOError:
                 sftp.mkdir(ACISS_path)
                 sftp.chdir(ACISS_path)
+            print("Transfering directries")
             self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), './')
             self.dirTransfer(sftp, '..{}PBS'.format(self._divider), './')
             self.dirTransfer(sftp, '.{}'.format(self._divider), './',
-                             ['install.py', 'helper.py', 'installer.py'])
+                             ['install.py', 'installer.py', 'clean.py', 'install_gui.py'])
+            print("Directoires transfered")
             sftp.mkdir('BRAT_BW')
-            self.genomeTransfer(sftp, genome_path, './BRAT_BW')
+            if genome_path != "":
+                print("Transfering genome (this may take a while)")
+                self.genomeTransfer(sftp, genome_path, './')
+                print("Genome transfered\nOrganizing repo")
             sftp.mkdir('mapChip')
             sftp.mkdir('MethylationPipe')
             self.organize(sftp)
             sftp.close()
             transport.close()
+            print("Successfully installed!")
         except Exception as e:
             print("ERROR BUILDING REPO: ", e)
+            clean.removeRemote(usrname, pswd, ACISS_path)
+            clean.removePaths(ACISS_path, self._os)
             sys.exit()
 
     def genomeTransfer(self, trans_sftp, genome_path, sink_dir):
@@ -131,17 +143,19 @@ class Installer:
         
         for root, dirs, files in os.walk(src_dir):
             for dr in dirs:
-                src_path  = os.path.join(root, dr)  
-                sink_path = src_path.replace(src_dir, sink_dir) 
-                trans_sftp.mkdir(sink_path)
+                if dr != '__pycache__':
+                    src_path  = os.path.join(root, dr)  
+                    sink_path = src_path.replace(src_dir, sink_dir) 
+                    trans_sftp.mkdir(sink_path)
             if file_excludes:
                 for f in files:
                     if f not in file_excludes:
                         src_path  = os.path.join(root, f)
-                        sink_path = src_path.replace(src_dir, sink_dir) 
-                        if self._os == 'win32':
-                            sink_path = sink_path.replace('\\', '/')
-                        trans_sftp.put(src_path, sink_path)
+                        if src_path.split(self._divider)[1] != '__pycache__':
+                            sink_path = src_path.replace(src_dir, sink_dir) 
+                            if self._os == 'win32':
+                                sink_path = sink_path.replace('\\', '/')
+                            trans_sftp.put(src_path, sink_path)
             else:
                 for f in files:
                     src_path  = os.path.join(root, f)
@@ -160,6 +174,7 @@ class Installer:
         sink_path = sink_path + '/pipeline'
         if os.path.exists(sink_path):
             print("ERROR: {} already exists...".format(sink_path))
+            print("shorcut not created")
             sys.exit()    
         proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
@@ -167,7 +182,7 @@ class Installer:
         if not pypath:
             print("ERROR: unable to find python3 path...")
             print("Make sure you have python3.x installed")
-            sys.exit()
+            sys.exit()                                 #FIXME: raise error instead?
         pypath = '#!' + pypath
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
         os.system('chmod +x {}'.format(src_path))
@@ -188,13 +203,44 @@ class Installer:
         if os.path.exists(sink_path):
             print("ERROR: {} already exists...".format(sink_path))
             sys.exit()    
+
+
+        #FIXME: testing block begin
+        proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
+        (out, err) = proc.communicate()
+        pypath = str(out)[2:-3]
+        if not pypath:
+            print("ERROR: unable to find python3 path...")
+            print("Make sure you have python3.x installed")
+            sys.exit()                             
+        py_call = pypath.split('/')[-1]
+        #FIXME: testing block end 
+
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
-        text = "#!/bin/bash\npython3 {}".format(src_path)
+        text = "#!/bin/bash\n{} {}".format(py_call, src_path)
         exe_file = open(sink_path, 'w')
         exe_file.write(text)
         exe_file.close()
         os.system("chmod 755 {}".format(sink_path))
-     
+    
+    def win32Shortcut(self, sink_path):
+        '''
+           Create a shortcut that runs Main.pyw. 
+           param: sink_path -> where the shortcut should
+                  be installed. 
+        '''
+        if sink_path[-1] == '\\':
+            sink_path = sink_path[:-1]
+        sink_path = sink_path + '\\pipeline.cmd'
+        if os.path.exists(sink_path):
+            print("ERROR: {} already exists...".format(sink_path))
+            sys.exit()    
+        os.system('touch {}'.format(sink_path)) 
+        src_path = os.path.dirname(os.getcwd()) + '\\GUI\\Main.pyw'
+        cmd_text = "python3 {}\nIF %ERRORLEVEL% NEQ 0 GOTO TryPython\n:TryPython\npython {}".format(src_path, src_path)
+        with open(sink_path, 'r+') as f:
+            f.write(cmd_text)
+
     def organize(self, sftp): 
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
         sftp.rename('chip_pipe.pbs', 'mapChip/chip_pipe.pbs')
@@ -215,24 +261,6 @@ class Installer:
         sftp.rename('meth_convert.py', 'MethylationPipe/meth_convert.py')
         sftp.rename('meth_pipe.pbs', 'MethylationPipe/meth_pipe.pbs')
         sftp.rename('methylome_comp.py', 'MethylationPipe/methylome_comp.py')
-
-    def win32Shortcut(self, sink_path):
-        '''
-           Create a shortcut that runs Main.pyw. 
-           param: sink_path -> where the shortcut should
-                  be installed. 
-        '''
-        if sink_path[-1] == '\\':
-            sink_path = sink_path[:-1]
-        sink_path = sink_path + '\\pipeline.cmd'
-        if os.path.exists(sink_path):
-            print("ERROR: {} already exists...".format(sink_path))
-            sys.exit()    
-        os.system('touch {}'.format(sink_path)) 
-        src_path = os.path.dirname(os.getcwd()) + '\\GUI\\Main.pyw'
-        cmd_text = "python3 {}\nIF %ERRORLEVEL% NEQ 0 GOTO TryPython\n:TryPython\npython {}".format(src_path, src_path)
-        with open(sink_path, 'r+') as f:
-            f.write(cmd_text)
 
     def install(self, usrname, pswd, ACISS_path, shortcut_path, genome_path):
         '''
@@ -258,5 +286,4 @@ class Installer:
             self.linuxShortcut(shortcut_path)
         else:
             self.win32Shortcut(shortcut_path)
-
 

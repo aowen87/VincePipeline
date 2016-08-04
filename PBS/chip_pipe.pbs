@@ -2,8 +2,6 @@
 
 #PBS -q generic
 #PBS -m abe
-#PBS -M pwj@uoregon.edu
--mail address
 
 cd _PATH_INSERT_/mapChip
 
