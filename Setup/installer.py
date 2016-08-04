@@ -212,7 +212,7 @@ class Installer:
         if not pypath:
             print("ERROR: unable to find python3 path...")
             print("Make sure you have python3.x installed")
-            sys.exit()                                 #FIXME: raise error instead?
+            sys.exit()                             
         py_call = pypath.split('/')[-1]
         #FIXME: testing block end 
 
