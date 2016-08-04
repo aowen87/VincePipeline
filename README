@@ -5,7 +5,7 @@ contact:
     aom@uoregon.edu or alisterowen87@gmail.com
     Specific question regarding individual pipelines
     can be sent to contacts found within their respective
-    documenations (located in the docs folder). 
+    documenations (located in the doc folder). 
 
 
 Installation:
@@ -27,23 +27,23 @@ Installation:
 
     Auto-installation (recommended):
               For auto-installation, open a terminal (powershell if on Windows), and navigate
-              to the Setup directory. Once here, you will run install_gui.py by launching 
+              to the Setup directory. Once here, you will run runInstall.py by launching 
               python. Make sure that you are launching with python 3 and not python 2. If python
               3 is your default, you will type the following command into your terminal and 
               press enter:
               
-              python install_gui.py
+              python runInstall.py
 
               If python 2 is your default, use the following command:
 
-              python3 install_gui.py
+              python3 runInstall.py
 
               If you don't know which version is you default, you can find out by typing the
               following command:
               
               python --version
 
-              Once install_gui.py is invoked, you will see a window with several entry boxes. 
+              Once runInstall.py is invoked, you will see a window with several entry boxes. 
               Most are self explanitory. The genome is an optional reference genome that you 
               can transfer to ACISS during installation. You will see a progress report being 
               printed in the terminal. Once complete, you should see a message that says 
@@ -53,14 +53,14 @@ Installation:
               pipeline. 
     
     Auto-Uninstallation:
-              If you wish to uninstall, invoke install_gui.py, enter your ACISS user name and
+              If you wish to uninstall, invoke runInstall.py, enter your ACISS user name and
               password, enter the path to the ACISS repo, and click uninstall. The desktop 
               shortcut and ACISS repo will be removed, and the GitHub repository will revert
               back to its original state.  
 
     Manual installation:
               There may be instances in which you wish to install manually. If this is the case, 
-              See the documentation within the docs folder for details on each pipeline and
+              See the documentation within the doc folder for details on each pipeline and
               their requirements. 
 
 
@@ -84,7 +84,9 @@ Usage:
     either place this genome in the pipeline's directory and enter the genome
     name without a path, or you can have the genome located elsewhere and 
     include the entire path when you run the computation. 
-
+        All Pipelines have an option to input an email address. If you choose to
+    do so, you will recieve an email notification when the pipeline starts and 
+    ends. The user name and password entries are for your ACISS account information. 
 
 BRAT-BW pipeline:
 
@@ -123,3 +125,63 @@ BRAT-BW pipeline:
         mergedFiles:           These files are used within the methylation pipeline. 
 
         5mCAverages:           Output from average calculations.  
+
+
+Methylation Pipeline:
+    
+    Input:
+       
+        .meth Conversion:                This tab contains the information for 
+                                         meth_convert.py
+
+            converted files directory    This directory contains the files from 
+                                         mergedFiles in the BRAT-BW pipeline.
+
+            results directory            This directory will contain the results
+                                         from meth_convert.py in the form of the
+                                         .hmr and .meth files.
+                                         Files are output in the following format:
+                                         prefix_strand_suffix
+                                         These files will be used in the rest of the
+                                         methylation pipeline.
+
+        methylome comparison:            This tab contains the information for 
+                                         methylome_comp.py
+
+            meth conversion directory    This directory contains the output from
+                                         meth_convert.py, or the .hmr and .meth files
+                                         for each sample.
+
+            results directory            This directory will contain the results from
+                                         methylome_comp.py outputting .methdiff files
+                                         as well as files containing the scores from
+                                         sample 1 and sample 2 with sample 1 being the
+                                         wild type or given sample and sample 2 being the
+                                         samples in the input directory.
+
+            .meth WT sample              This is the .meth file of the sample all other
+                                         samples will be compared to.
+
+            .hmr WT sample               This is the .hmr file of the sample all other
+                                         samples will be compared to.
+
+Chip-Seq analysis:
+    
+    Input:
+       
+        ChiP Reads Directory:    This tab contains the information for chip_map_reads.py
+
+        Genome:                  If you have a reference genome that you'd like to use, 
+                                 you can enter this directory. Otherwise, enter a fasta 
+                                 file, and the genome will be created from this. 
+
+        Chip Output directory:   This directory will contain the resulting files. 
+
+    Output:
+        
+        <your_results_directory>/results: .bam and .bai files.
+
+
+
+For futher questions, see documentation within the doc folder, or contact one of the
+contributors. 

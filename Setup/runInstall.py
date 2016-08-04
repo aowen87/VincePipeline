@@ -27,12 +27,12 @@ class InstallInterface(Frame):
 
         # Widgets
 
-        progress_box = Frame(self, relief = SUNKEN, borderwidth = 5)
-        scroll = Scrollbar(progress_box)
-        scroll.pack(side = RIGHT, fill = Y)
-        self._message_txt = Text(progress_box, height = 7)
-        self._message_txt.config(state=DISABLED)
-        self._message_txt.pack(fill = X)
+        #progress_box = Frame(self, relief = SUNKEN, borderwidth = 5)
+        #scroll = Scrollbar(progress_box)
+        #scroll.pack(side = RIGHT, fill = Y)
+        #self._message_txt = Text(progress_box, height = 7)
+        #self._message_txt.config(state=DISABLED)
+        #self._message_txt.pack(fill = X)
 
         pathdirlabel = Label(self, text = 'ACISS install directory: ')
         pathdirlabel.grid(row = 0, column = 0, sticky = W, padx = PADX, pady = PADY)
@@ -55,31 +55,31 @@ class InstallInterface(Frame):
         genomelabel = Label(self, text = 'genome path: ')
         genomelabel.grid(row = 3, column = 0, sticky = W, padx = PADX, pady = PADY)
 
-        self._genomepath = Entry(self, width = ENTRY_W - 10)
+        self._genomepath = Entry(self, width = ENTRY_W-15)
         self._genomepath.grid(row = 3, column = 1, sticky = W, padx = PADX, pady = PADY, columnspan = 2)
 
         genomebutton = Button(self, text = 'load genome', command = self.load_directory)
-        genomebutton.grid(row = 3, column = 2, sticky = W, padx = PADX, pady = PADY)
+        genomebutton.grid(row = 3, column = 2, sticky = E, padx = PADX, pady = PADY)
 
-        progress_box.grid(row = 4, column = 0, columnspan = 3, sticky=N+E+S+W, padx = PADX, pady = PADY)
+        #progress_box.grid(row = 4, column = 0, columnspan = 3, sticky=N+E+S+W, padx = PADX, pady = PADY)
 
         run_install = Button(self, text = 'Install Pipeline', command = self.run_setup)
-        run_install.grid(row = 5, column = 1, columnspan = 1, sticky = E, padx = PADX, pady = PADY)
+        run_install.grid(row = 4, column = 0, columnspan = 1, sticky = S+W, padx = PADX, pady = PADY)
 
         run_uninstall = Button(self, text = 'Uninstall Pipeline', command = self.uninstall)
-        run_uninstall.grid(row = 5, column = 2, columnspan = 1, sticky = E, padx = PADX, pady = PADY)
+        run_uninstall.grid(row = 4, column = 1, columnspan = 1, sticky = S+W, padx = PADX, pady = PADY)
 
         self._pathdir.focus_set()
 
 
 
-    def insert_text(self, string, text_box):
-        """
-        make text box active then disable after adding text.
-        """    
-        text_box.configure(state=NORMAL)
-        text_box.insert(INSERT, string)
-        text_box.configure(state=DISABLED)
+    #def insert_text(self, string, text_box):
+    #    """
+    #    make text box active then disable after adding text.
+    #    """    
+    #    text_box.configure(state=NORMAL)
+    #    text_box.insert(INSERT, string)
+    #    text_box.configure(state=DISABLED)
 
 
 
@@ -104,7 +104,7 @@ class InstallInterface(Frame):
         #    self.insert_text('The shortcut already exists!', self._message_txt)
         #    sys.exit(1)
 
-        self.insert_text(shortcut_path, self._message_txt)
+        #self.insert_text(shortcut_path, self._message_txt)
 
         install(username, password, path_dir, shortcut_path, genome_path)
 
@@ -119,7 +119,8 @@ class InstallInterface(Frame):
         elif self._cur_os == 'win32' or self._cur_os == 'cygwin':
             shortcut_path = shortcut_path.replace("/", "\\") + "\\pipeline.cmd"
         else:
-            self.insert_text("Invalid or unsupported os: " + self._cur_os, self._message_text)
+            #self.insert_text("Invalid or unsupported os: " + self._cur_os, self._message_text)
+            print("Invalid or unsupported os: " + self._cur_os)
             sys.exit()
         #print(local_path)
         fullClean(username, password, path_dir, shortcut_path, self._cur_os)
