@@ -68,7 +68,7 @@ class Installer:
             self.dirTransfer(sftp, '..{}pipeline'.format(self._divider), './')
             self.dirTransfer(sftp, '..{}PBS'.format(self._divider), './')
             self.dirTransfer(sftp, '.{}'.format(self._divider), './',
-                             ['install.py', 'installer.py', 'clean.py', 'install_gui.py'])
+                             ['install.py', 'installer.py', 'clean.py', 'runInstall.py'])
             print("Directoires transfered")
             sftp.mkdir('BRAT_BW')
             if genome_path != "":
@@ -80,7 +80,6 @@ class Installer:
             self.organize(sftp)
             sftp.close()
             transport.close()
-            print("Successfully installed!")
         except Exception as e:
             print("ERROR BUILDING REPO: ", e)
             clean.removeRemote(usrname, pswd, ACISS_path)
@@ -169,6 +168,7 @@ class Installer:
            Create a shortcut to Main.pyw within the given destination path.
            param: sink_path -> the path to create a shortcut in. 
         '''
+        print("Creating shortcut")
         if sink_path[-1] == '/':
             sink_path = sink_path[:-1]
         sink_path = sink_path + '/pipeline'
@@ -191,12 +191,14 @@ class Installer:
             f.seek(0, 0)
             f.write(pypath.rstrip('\r\n') + '\n' + content)
         os.symlink(src_path, '{}'.format(sink_path))
+        print("Shortcut created")
 
     def unixShortcut(self, sink_path):
         '''
            Create a bash script that calls Main.pyw within the given destination path.
            param: sink_path -> the path to create a shortcut in. 
         '''
+        print("Creating shortcut")
         if sink_path[-1] == '/':
             sink_path = sink_path[:-1]
         sink_path = sink_path + '/pipeline'
@@ -212,13 +214,13 @@ class Installer:
             print("Make sure you have python3.x installed")
             sys.exit()                             
         py_call = pypath.split('/')[-1]
-
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
         text = "#!/bin/bash\n{} {}".format(py_call, src_path)
         exe_file = open(sink_path, 'w')
         exe_file.write(text)
         exe_file.close()
         os.system("chmod 755 {}".format(sink_path))
+        print("Shortcut created")
     
     def win32Shortcut(self, sink_path):
         '''
@@ -226,6 +228,7 @@ class Installer:
            param: sink_path -> where the shortcut should
                   be installed. 
         '''
+        print("Creating shortcut")
         if sink_path[-1] == '\\':
             sink_path = sink_path[:-1]
         sink_path = sink_path + '\\pipeline.cmd'
@@ -237,6 +240,7 @@ class Installer:
         cmd_text = "python3 {}\nIF %ERRORLEVEL% NEQ 0 GOTO TryPython\n:TryPython\npython {}".format(src_path, src_path)
         with open(sink_path, 'r+') as f:
             f.write(cmd_text)
+        print("Shortcut created")
 
     def organize(self, sftp): 
         sftp.rename('chip_map_reads.py', 'mapChip/chip_map_reads.py')
@@ -283,4 +287,4 @@ class Installer:
             self.linuxShortcut(shortcut_path)
         else:
             self.win32Shortcut(shortcut_path)
-
+        print("Successfully installed!")

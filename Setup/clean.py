@@ -18,6 +18,17 @@ def rmShortcut(shortcut_path):
     print("Removing shortcut")
     subprocess.call(["rm", shortcut_path]) 
 
+def removeMainLine():
+    """
+    For Linux uninstalls, remove the added line from Main.pyw.
+    """
+    divider    = '/'
+    gui_path   = ((divider).join(os.path.dirname(os.path.abspath(__file__)).split(divider)[:-1]) 
+                   + "{}GUI{}".format(divider, divider))
+    Main_path  = gui_path + "Main.pyw"
+    main_file  = open(Main_path).readlines()
+    open(Main_path, 'w').writelines(main_file[1:])
+
 def removePaths(ACISS_path, osystem):
     """
        Remove all paths that were added to various files. These
@@ -39,10 +50,6 @@ def removePaths(ACISS_path, osystem):
     gui_path   = ((divider).join(os.path.dirname(os.path.abspath(__file__)).split(divider)[:-1]) 
                    + "{}GUI{}".format(divider, divider))
     cache_path = gui_path + "__pycache__"
-    if osystem == 'linux':
-        Main_path  = gui_path + "Main.pyw"
-        main_file  = open(Main_path).readlines()
-        open(Main_path, 'w').writelines(main_file[1:])#FIXME: testing
     os.system("rm -r {}".format(cache_path))
     path_dirs = ['..{}PBS'.format(divider), '..{}GUI'.format(divider)]
     for path_dir in path_dirs:
@@ -74,7 +81,6 @@ def removeRemote(usrname, pswd, ACISS_path):
     except Exception:
         pass
 
-
 def fullClean(usrname, pswd, ACISS_path, shortcut_path, osystem):
     '''
        Uninstall program => remove ACISS repo, remove shortcut, 
@@ -83,6 +89,8 @@ def fullClean(usrname, pswd, ACISS_path, shortcut_path, osystem):
     removeRemote(usrname, pswd, ACISS_path)
     removePaths(ACISS_path, osystem)
     rmShortcut(shortcut_path)
+    if osystem == 'linux':
+        removeMainLine()
     print("Uninstall complete")
     
 
