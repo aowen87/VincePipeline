@@ -182,7 +182,7 @@ class Installer:
         if not pypath:
             print("ERROR: unable to find python3 path...")
             print("Make sure you have python3.x installed")
-            sys.exit()                                 #FIXME: raise error instead?
+            sys.exit()                      
         pypath = '#!' + pypath
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
         os.system('chmod +x {}'.format(src_path))
@@ -204,8 +204,6 @@ class Installer:
             print("ERROR: {} already exists...".format(sink_path))
             sys.exit()    
 
-
-        #FIXME: testing block begin
         proc = subprocess.Popen(["which python3"], stdout=subprocess.PIPE, shell=True)
         (out, err) = proc.communicate()
         pypath = str(out)[2:-3]
@@ -214,7 +212,6 @@ class Installer:
             print("Make sure you have python3.x installed")
             sys.exit()                             
         py_call = pypath.split('/')[-1]
-        #FIXME: testing block end 
 
         src_path = os.path.dirname(os.getcwd()) + '/GUI/Main.pyw'
         text = "#!/bin/bash\n{} {}".format(py_call, src_path)
