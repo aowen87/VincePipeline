@@ -1,6 +1,6 @@
 __author__ = 'Alister Maguire'
 __date__ = '05/17/2016'
-__description__ = """The _PATH_INSERT_ for the launching and running bisulfiteMap.py 
+__description__ = """The for the launching and running bisulfiteMap.py 
 and analyzing.py as a single pipeline. """
 
 from tkinter import *
@@ -12,7 +12,7 @@ class BratInterface(Interface):
     
     def __init__(self, master):
         '''
-        Set up the main _PATH_INSERT_ interface and all class variables. 
+        Set up the main interface and all class variables. 
         '''  
         Interface.__init__(self, master)
         
@@ -81,7 +81,7 @@ class BratInterface(Interface):
     
     def run_pipeline(self):
         '''
-        Retrieve entries from the _PATH_INSERT_, create the ACISS
+        Retrieve entries from the, create the ACISS
         command, and call aciss_connect().
         '''
         #Retrieve entries
