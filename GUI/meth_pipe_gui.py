@@ -1,7 +1,7 @@
 __author__ = 'Hiranmayi Duvvuri, Pat Johnson'
 __date__ = '06/01/2016'
 __description__ = """
-_PATH_INSERT_ for part of methylation pipeline.
+ for part of methylation pipeline.
 """
 
 from tkinter import *
