@@ -11,7 +11,7 @@ class ChipInterface(Interface):
 
     def __init__(self, master):
         '''
-        Set up the main _PATH_INSERT_ interface and all class variables. 
+        Set up the main interface and all class variables. 
         '''  
         Interface.__init__(self, master)
         #fonts, colors, padding, etc. 
