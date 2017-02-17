@@ -1,3 +1,12 @@
+'''
+@author: Alister Maguire
+
+Installation of the pipeline program. 
+Installation has been tested on Windows 10, 
+Linux (xubuntu), and Mac.
+'''
+
+
 import argparse
 import clean
 import os
