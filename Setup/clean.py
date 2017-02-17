@@ -1,3 +1,9 @@
+"""
+@author: Alister Maguire
+
+Uninstall proceedure. 
+"""
+
 import argparse
 import sys
 import subprocess
