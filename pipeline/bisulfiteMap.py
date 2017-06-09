@@ -35,7 +35,7 @@ def bisulfiteMap(BRAT_genome_dir, fastq_dir, build, non_BS_mismatches, quality_s
         print("ERROR: missing fileDir -> mappedNoDupl")
         sys.exit()
       
-    fastqFiles = [fileDir for fileDir in glob.glob('./{}/*.fastq'.format(fastq_dir))]
+    fastqFiles = [fileDir for fileDir in glob.glob('{}/*.fastq'.format(fastq_dir))]
     
     if build:
         os.system('build_bw -P {}'.format(BRAT_genome_dir))
